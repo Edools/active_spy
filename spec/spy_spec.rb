@@ -4,11 +4,15 @@ describe ActiveEvent::Spy do
 
   it 'should be able to watch on methods' do
 
+    # Dummy event handler for the spec
+    #
     class FooEvents < ActiveEvent::Base
       def before_bar
       end
     end
 
+    # Dummy class to watch methods in the spec
+    #
     class Foo
       include ActiveEvent::Spy
 
@@ -25,6 +29,5 @@ describe ActiveEvent::Spy do
     foo = Foo.new
     foo.bar
   end
-
 
 end

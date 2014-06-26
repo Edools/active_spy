@@ -49,7 +49,7 @@ Style/BracesAroundHashParameters:
 
 # New lambda syntax is UGLY, don't enforce it
 Style/LambdaCall:
-  EnforcedStyle: braces
+  EnforcedStyle: call
 
 AllCops:
   Include:
