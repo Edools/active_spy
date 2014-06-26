@@ -1,4 +1,6 @@
 module ActiveEvent
+  # Defines a class to hold the configuration used to send events.
+  #
   class Configuration
     class << self
       # Set the default event-runner host
@@ -27,7 +29,7 @@ module ActiveEvent
       #
       # @return [Hash] actual settings
       def settings
-        {host: @host, port: @port}
+        { host: @host, port: @port }
       end
     end
   end
