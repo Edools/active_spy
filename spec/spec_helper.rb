@@ -2,7 +2,7 @@ require 'simplecov'
 require 'pry'
 
 module SimpleCov
-  class Configuration
+  module Configuration
     def clean_filters
       @filters = []
     end
