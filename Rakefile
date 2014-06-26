@@ -15,10 +15,15 @@ require 'jeweler'
 Jeweler::Tasks.new do |gem|
   # gem is a Gem::Specification... see http://guides.rubygems.org/specification-reference/ for more options
   gem.name = "active_event"
-  gem.homepage = "http://github.com/douglascamata/active_event"
+  gem.homepage = "http://github.com/edools/active_event"
   gem.license = "MIT"
-  gem.summary = %Q{TODO: one-line summary of your gem}
-  gem.description = %Q{TODO: longer description of your gem}
+  gem.summary = %Q{Send model events to a server, receive and process them elsewhere}
+  gem.description = <<-DESC
+    With this gem you can watch your models for events (like create, update,
+    delete), send these events to a event-runner instance and it redirect these
+    events to other apps that are subscrived for them. This gem also provides
+    classes that you can use to process the received events too.
+  DESC
   gem.email = "d.camata@gmail.com"
   gem.authors = ["Douglas Camata"]
   # dependencies defined in Gemfile
