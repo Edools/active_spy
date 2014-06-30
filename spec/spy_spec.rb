@@ -9,6 +9,9 @@ describe ActiveEvent::Spy do
     class FooEvents < ActiveEvent::Base
       def before_bar
       end
+
+      def after_bar
+      end
     end
 
     # Dummy class to watch methods in the spec
@@ -25,6 +28,7 @@ describe ActiveEvent::Spy do
     ActiveEvent::SpyList.activate
 
     expect_any_instance_of(FooEvents).to receive(:before_bar).and_call_original
+    expect_any_instance_of(FooEvents).to receive(:after_bar).and_call_original
 
     foo = Foo.new
     foo.bar
