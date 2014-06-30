@@ -15,14 +15,14 @@ describe ActiveEvent::Spy do
     #
     class Foo
       include ActiveEvent::Spy
+      watch_method :bar
 
       def bar
       end
-      watch_method :bar
       # watch_method :initialize
     end
 
-    # ActiveEvent::SpiesList.instance.active_all
+    ActiveEvent::SpyList.activate
 
     expect_any_instance_of(FooEvents).to receive(:before_bar).and_call_original
 
