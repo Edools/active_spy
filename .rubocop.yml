@@ -57,3 +57,4 @@ AllCops:
   Exclude:
     - 'spec/spec_helper.rb'
     - 'spec/support/**'
+    - 'spec/rails_integration/**/*'
