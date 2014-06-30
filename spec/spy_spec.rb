@@ -22,7 +22,6 @@ describe ActiveEvent::Spy do
 
       def bar
       end
-      # watch_method :initialize
     end
 
     ActiveEvent::SpyList.activate
