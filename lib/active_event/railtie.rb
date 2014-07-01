@@ -1,6 +1,5 @@
 require 'rails'
 
-module ActiveEvent
   # Railtie class to automatically include {ActiveEvent::Spy} in all
   # +ActiveRecord::Base+
   #
@@ -16,4 +15,3 @@ module ActiveEvent
       ActiveEvent::SpyList.activate
     end
   end
-end

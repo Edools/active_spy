@@ -29,8 +29,10 @@ module ActiveEvent
         realm = @object.realm
         actor = @object.actor
 
+        real_method = method.to_s.split('_').last
+
         RestClient.post "#{host}:#{port}", payload: payload, actor: actor,
-          realm: realm
+          realm: realm, type: real_method
       end
     end
   end

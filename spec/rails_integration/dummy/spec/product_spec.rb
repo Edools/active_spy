@@ -22,7 +22,8 @@ describe Product do
       hash_including({
         payload: product.to_json,
         realm: product.realm,
-        actor: actor
+        actor: actor,
+        type: 'save'
       })
     )
 

@@ -50,9 +50,11 @@ module ActiveEvent
     #
     def patch(klass, method)
       ActiveSupport::Inflector.constantize(klass).class_eval do
-        attr_reader :actor
-        define_method :actor= do |another_actor|
-          @actor = another_actor.to_actor
+        if defined?(Rails)
+          attr_reader :actor
+          define_method :actor= do |another_actor|
+            @actor = another_actor.to_actor
+          end
         end
 
         old_method = instance_method(method)
