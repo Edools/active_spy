@@ -3,6 +3,7 @@ PATH
   specs:
     active_event (0.0.0)
       activesupport (~> 4.1.2)
+      rest-client
 
 GEM
   remote: https://rubygems.org/
@@ -66,6 +67,8 @@ GEM
       rake (>= 0.8.7)
       thor (>= 0.18.1, < 2.0)
     rake (10.3.2)
+    rest-client (1.6.7)
+      mime-types (>= 1.16)
     rspec-core (3.0.2)
       rspec-support (~> 3.0.0)
     rspec-expectations (3.0.2)

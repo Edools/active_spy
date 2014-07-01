@@ -1,6 +1,6 @@
 require 'rails'
 
-module ActiveEevent
+module ActiveEvent
   # Railtie class to automatically include {ActiveEvent::Spy} in all
   # +ActiveRecord::Base+
   #

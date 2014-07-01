@@ -1,6 +1,5 @@
 module ActiveEvent
-  # Make requests to the event-runner service using the object whose method
-  # was being watched.
+  # Default template for callbacks handlers.
   #
   class Base
     def initialize(object)

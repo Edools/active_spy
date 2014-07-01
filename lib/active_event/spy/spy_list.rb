@@ -14,9 +14,7 @@ module ActiveEvent
       @spies = []
     end
 
-    def spies
-      @spies
-    end
+    attr_reader :spies
 
     # Proxy all methods called in the {ActiveEvent::SpyList} to
     # {ActiveEvent::SpyList} instance. Just a syntax sugar.
@@ -52,6 +50,11 @@ module ActiveEvent
     #
     def patch(klass, method)
       ActiveSupport::Inflector.constantize(klass).class_eval do
+        attr_reader :actor
+        define_method :actor= do |another_actor|
+          @actor = another_actor.to_actor
+        end
+
         old_method = instance_method(method)
         define_method method do
           send(:invoke_before_callback, method)
