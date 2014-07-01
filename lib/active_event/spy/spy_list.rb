@@ -14,6 +14,10 @@ module ActiveEvent
       @spies = []
     end
 
+    def spies
+      @spies
+    end
+
     # Proxy all methods called in the {ActiveEvent::SpyList} to
     # {ActiveEvent::SpyList} instance. Just a syntax sugar.
     #

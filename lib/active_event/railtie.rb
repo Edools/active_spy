@@ -10,5 +10,10 @@ module ActiveEevent
         include ActiveEvent::Spy
       end
     end
+
+    config.after_initialize do
+      Rails.application.eager_load!
+      ActiveEvent::SpyList.activate
+    end
   end
 end
