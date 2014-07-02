@@ -16,7 +16,7 @@ module ActiveEvent
     #
     def invoke_callback(method, callback_type)
       callback_invoker = callback_invoker_class.new(self)
-      callback = "#{callback_type.to_s}_#{method}"
+      callback = "#{callback_type}_#{method}"
       return unless callback_invoker.respond_to?(callback)
       callback_invoker.send(callback)
     end

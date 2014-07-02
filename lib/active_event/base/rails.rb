@@ -31,8 +31,14 @@ module ActiveEvent
 
         real_method = method.to_s.split('_').last
 
-        RestClient.post "#{host}:#{port}", payload: payload, actor: actor,
-          realm: realm, type: real_method
+        event_params = {
+          type:     real_method,
+          actor:    actor,
+          realm:    realm,
+          payload:  payload
+        }
+
+        RestClient.post "#{host}:#{port}", event: event_params
       end
     end
   end
