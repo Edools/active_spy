@@ -19,13 +19,16 @@ describe Product do
     product.actor = actor
 
     expect(RestClient).to receive(:post).with('http://google.com:80',
-      hash_including({
-        payload: product.to_json,
-        realm: product.realm,
-        actor: actor,
-        type: 'save'
-      })
-    )
+      hash_including(
+        event: {
+          payload: {
+            product: product.attributes
+          },
+          realm: product.realm,
+          actor: actor,
+          type: 'save'
+        }
+      ))
 
     product.save
 

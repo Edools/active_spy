@@ -4,7 +4,7 @@ class Product < ActiveRecord::Base
 
 
   def payload_for(method)
-    to_json
+    {product: attributes}
   end
 
   def realm
