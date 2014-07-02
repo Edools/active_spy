@@ -11,22 +11,14 @@ module ActiveEvent
       base.extend ClassMethods
     end
 
-    # Invokes the before callback method on the invoker class
+    # Invokes the callback method on the invoker class. The +callback_type+
+    # param tells wether it will be called +:after+ or +before+.
     #
-    def invoke_before_callback(method)
+    def invoke_callback(method, callback_type)
       callback_invoker = callback_invoker_class.new(self)
-      before_callback = "before_#{method}"
-      return unless callback_invoker.respond_to?(before_callback)
-      callback_invoker.send(before_callback)
-    end
-
-    # Invokes the after callback method on the invoker class
-    #
-    def invoke_after_callback(method)
-      callback_invoker = callback_invoker_class.new(self)
-      after_callback = "after_#{method}"
-      return unless callback_invoker.respond_to?(after_callback)
-      callback_invoker.send(after_callback)
+      callback = "#{callback_type.to_s}_#{method}"
+      return unless callback_invoker.respond_to?(callback)
+      callback_invoker.send(callback)
     end
 
     # Gets the invoker class based on the class' name

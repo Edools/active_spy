@@ -59,9 +59,9 @@ module ActiveEvent
 
         old_method = instance_method(method)
         define_method method do
-          send(:invoke_before_callback, method)
+          send(:invoke_callback, method, :before)
           old_method.bind(self).call
-          send(:invoke_after_callback, method)
+          send(:invoke_callback, method, :after)
         end
       end
     end
