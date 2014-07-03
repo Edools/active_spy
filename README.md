@@ -43,6 +43,42 @@ ActiveEvent::SpyList.activate
 Chair.new.break!
 ```
 
+### Rails app
+
+Create a `ProductEvent` class at  `RAILS_ROOT/app/events`
+```ruby
+class ProductEvents < ActiveEvent::Rails::Base
+end
+```
+
+Declare ActiveEvent's `model_realm` and `watch_model_changes` methods
+```ruby
+
+class User < ActiveRecord::Base
+  belong_to :project
+  belongs_to :project_group
+
+  model_realm { :project }
+  watch_model_changes
+
+  # ActiveEvent's payload_for method override
+  #
+  # def payload_for(method)
+  #   { user: attributes }
+  # end
+
+  # ActiveEvent's realm method override
+  #
+  # def realm
+  #   return project_group if project_group.admin == self
+  #   project
+  # end
+end
+```
+
+You may override `payload_for(method)` and `realm` for more complex use cases.
+
+
 ## Contributing to active_event
 
 * Check out the latest master to make sure the feature hasn't been implemented or the bug hasn't been fixed yet.
