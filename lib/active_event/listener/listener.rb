@@ -5,6 +5,9 @@ module ActiveEvent
     class EventHandler
       include ActiveSupport::Inflector
 
+      # Constant to hold the model translations. The key is the incoming
+      # +ref_type+ and the value is the matching model class.
+      #
       MODEL_HANDLER = {}
 
       # Handle a request with +params+ and sync the database according to
