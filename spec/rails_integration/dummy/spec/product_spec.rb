@@ -22,13 +22,15 @@ describe Product do
       hash_including(
         event: {
           payload: {
-            product: product.attributes
+            product: product.attributes,
+            action: 'save'
           },
           realm: product.realm,
           actor: actor,
-          type: 'save'
+          type: 'Product'
         }
-      ))
+      )
+    )
 
     product.save
 

@@ -14,7 +14,7 @@ module ActiveEvent
       # them.
       #
       def handle(params)
-        object_type, callback = params.delete(:ref_type), params.delete(:type)
+        object_type, callback = params.delete(:type), params[:payload].delete(:action)
         payload_content = params.delete(:payload)[object_type.downcase.to_sym]
         sync_database(callback, object_type, payload_content)
       end

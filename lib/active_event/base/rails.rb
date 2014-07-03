@@ -25,14 +25,14 @@ module ActiveEvent
         host = ActiveEvent::Configuration.host
         port = ActiveEvent::Configuration.port
 
-        payload = @object.payload_for(method)
+        real_method = method.to_s.split('_').last
+        payload = @object.payload_for(method).merge(action: real_method)
         realm = @object.realm
         actor = @object.actor
 
-        real_method = method.to_s.split('_').last
 
         event_params = {
-          type:     real_method,
+          type:     @object.class.name,
           actor:    actor,
           realm:    realm,
           payload:  payload

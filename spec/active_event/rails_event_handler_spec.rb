@@ -10,12 +10,12 @@ describe ActiveEvent::Rails::EventHandler do
     let(:handler) { ActiveEvent::Rails::EventHandler.new }
     let!(:params) do
       {
-        ref_type: 'User',
-        type: 'save',
+        type: 'User',
         payload: {
           user: {
             name: 'Pedro'
-          }
+          },
+          action: 'save'
         }
       }
     end
@@ -38,7 +38,7 @@ describe ActiveEvent::Rails::EventHandler do
     end
 
     it 'should be able to sync a model deletion' do
-      params[:type] = 'destroy'
+      params[:payload][:action] = 'destroy'
       params[:payload][:user][:id] = 1
 
       expect(User).to receive(:find).with(1).and_return(User.new)
