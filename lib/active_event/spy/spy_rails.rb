@@ -40,7 +40,7 @@ module ActiveEvent
         # actions.
         #
         def inject_payload_for_method
-          define_method :payload_for do
+          define_method :payload_for do |_method|
             { self.class.name.downcase.to_sym => attributes }
           end
         end
