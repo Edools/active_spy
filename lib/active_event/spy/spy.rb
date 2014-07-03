@@ -32,9 +32,16 @@ module ActiveEvent
     module ClassMethods
       # Set watchers for the +method+
       #
-      def watch_method(method)
-        spy = { 'class' => name, 'method' => method }
-        ActiveEvent::SpyList << spy
+      def watch_method(*methods)
+        methods.each do |method|
+          ActiveEvent::SpyList << { 'class' => name, 'method' => method }
+        end
+      end
+
+      if defined?(Rails)
+        def watch_model_changes
+          watch_method :save, :destroy
+        end
       end
     end
   end

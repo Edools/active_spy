@@ -33,7 +33,5 @@ describe Product do
     )
 
     product.save
-
   end
-
 end

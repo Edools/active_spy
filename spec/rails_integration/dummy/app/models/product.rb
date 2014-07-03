@@ -1,6 +1,6 @@
 class Product < ActiveRecord::Base
 
-  watch_method :save
+  watch_model_changes
 
   def payload_for(method)
     {product: attributes}
