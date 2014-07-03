@@ -7,6 +7,7 @@ class Railtie < Rails::Railtie
   initializer 'active_event.spies' do
     ActiveSupport.on_load(:active_record) do
       include ActiveEvent::Spy
+      include ActiveEvent::Rails::Spy
     end
   end
 

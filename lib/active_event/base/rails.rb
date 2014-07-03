@@ -47,21 +47,21 @@ module ActiveEvent
         host = ActiveEvent::Configuration.host
         port = ActiveEvent::Configuration.port
 
-        real_method = method.to_s.split('_').last
-        payload = @object.payload_for(method)
-          .merge(action: get_action(real_method))
-        realm = @object.realm
-        actor = @object.actor
-
-        event_params = {
-          type:     @object.class.name,
-          actor:    actor,
-          realm:    realm,
-          payload:  payload
-        }
-
-        RestClient.post "#{host}:#{port}", event: event_params
+        RestClient.post "#{host}:#{port}", event: get_request_params(method)
         remove_is_new_method(@object)
+      end
+
+      # Get the event request params for a given +method+.
+      #
+      def get_request_params(method)
+        real_method = method.to_s.split('_').last
+        action = get_action(real_method)
+        {
+          type:     @object.class.name,
+          actor:    @object.actor,
+          realm:    @object.realm,
+          payload:  @object.payload_for(action).merge(action: action)
+        }
       end
 
       # Remove a previously added +is_new+ attribute from a given object.

@@ -37,12 +37,6 @@ module ActiveEvent
           ActiveEvent::SpyList << { 'class' => name, 'method' => method }
         end
       end
-
-      if defined?(Rails)
-        def watch_model_changes
-          watch_method :save, :destroy
-        end
-      end
     end
   end
 end

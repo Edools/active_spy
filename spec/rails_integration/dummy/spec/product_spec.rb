@@ -33,5 +33,6 @@ describe Product do
     )
 
     product.save
+    expect(product.realm).to eql('my realm')
   end
 end
