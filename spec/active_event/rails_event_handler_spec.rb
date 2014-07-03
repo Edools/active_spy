@@ -15,35 +15,42 @@ describe ActiveEvent::Rails::EventHandler do
           user: {
             name: 'Pedro'
           },
-          action: 'save'
+          action: 'create'
         }
       }
     end
 
     it 'should be able to sync a model creation' do
-      expect_any_instance_of(User).to receive(:update_attributes).with(name: 'Pedro')
-      expect(handler).to receive(:save).with('save', 'User', name: 'Pedro').and_call_original
+      params[:payload][:action] = 'create'
+      expect_any_instance_of(User).to receive(:update_attributes)
+        .with(name: 'Pedro')
+      expect(handler).to receive(:create).with('User', name: 'Pedro')
+        .and_call_original
 
       handler.handle(params)
     end
 
     it 'should be able to sync a model update' do
-      params[:payload][:user][:id] = 1
+      params[:payload][:action] = 'update'
+      params[:payload][:user][:guid] = 1
 
-      expect_any_instance_of(User).to receive(:update_attributes).with(name: 'Pedro')
-      expect(User).to receive(:find).with(1).and_return(User.new)
-      expect(handler).to receive(:save).with('save', 'User', id: 1, name: 'Pedro').and_call_original
+      expect_any_instance_of(User).to receive(:update_attributes)
+        .with(name: 'Pedro')
+      expect(User).to receive(:find_by).with(guid: 1).and_return(User.new)
+      expect(handler).to receive(:update).with('User', guid: 1, name: 'Pedro')
+        .and_call_original
 
       handler.handle(params)
     end
 
     it 'should be able to sync a model deletion' do
       params[:payload][:action] = 'destroy'
-      params[:payload][:user][:id] = 1
+      params[:payload][:user][:guid] = 1
 
-      expect(User).to receive(:find).with(1).and_return(User.new)
+      expect(User).to receive(:find_by).with(guid: 1).and_return(User.new)
       expect_any_instance_of(User).to receive(:destroy!)
-      expect(handler).to receive(:destroy).with('destroy', 'User', id: 1, name: 'Pedro').and_call_original
+      expect(handler).to receive(:destroy).with('User', guid: 1, name: 'Pedro')
+        .and_call_original
 
       handler.handle(params)
     end

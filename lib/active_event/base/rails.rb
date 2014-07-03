@@ -15,7 +15,29 @@ module ActiveEvent
       # before and after callabcks).
       #
       def respond_to?(method)
-        method.include? 'after_'
+        method.include?('after_') || method == 'before_save'
+      end
+
+      # Set a flag in the object to tell us wether it's a new record or not.
+      #
+      def before_save
+        inject_is_new_method(@object)
+        @object.is_new = true if @object.new_record?
+      end
+
+      # Inject an attribute in the +object+, called +is_new?+ and a setter
+      # for it.
+      #
+      def inject_is_new_method(object)
+        object.instance_eval do
+          def is_new=(value)
+            @is_new = value
+          end
+
+          def is_new?
+            @is_new
+          end
+        end
       end
 
       # Overriding to always send the object to the server, even though the
@@ -26,10 +48,10 @@ module ActiveEvent
         port = ActiveEvent::Configuration.port
 
         real_method = method.to_s.split('_').last
-        payload = @object.payload_for(method).merge(action: real_method)
+        payload = @object.payload_for(method)
+          .merge(action: get_action(real_method))
         realm = @object.realm
         actor = @object.actor
-
 
         event_params = {
           type:     @object.class.name,
@@ -39,6 +61,26 @@ module ActiveEvent
         }
 
         RestClient.post "#{host}:#{port}", event: event_params
+        remove_is_new_method(@object)
+      end
+
+      # Remove a previously added +is_new+ attribute from a given object.
+      #
+      def remove_is_new_method(object)
+        object.instance_eval do
+          undef :is_new=
+          undef :is_new?
+        end
+      end
+
+      # Returns the correct action for the method called in the model.
+      #
+      def get_action(real_method)
+        if real_method == 'save'
+          return 'create' if @object.is_new?
+          return 'update'
+        end
+        'destroy'
       end
     end
   end

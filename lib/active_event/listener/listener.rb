@@ -14,8 +14,10 @@ module ActiveEvent
       # them.
       #
       def handle(params)
-        object_type, callback = params.delete(:type), params[:payload].delete(:action)
+        object_type = params.delete(:type)
+        callback = params[:payload].delete(:action)
         payload_content = params.delete(:payload)[object_type.downcase.to_sym]
+
         sync_database(callback, object_type, payload_content)
       end
 
@@ -24,41 +26,30 @@ module ActiveEvent
       # +payload+, triggered by the callback +callback+.
       #
       def sync_database(callback, object_type, payload)
-        send(callback, callback, object_type, payload)
+        send(callback, object_type, payload)
       end
 
-      # Logic to handle object's creation and updates.
+      # Logic to handle object's creation
       #
-      def save(callback, object_type, payload)
-        klass = get_object_class(callback, object_type)
-        object = get_object(payload, klass)
-        object.update_attributes(payload)
+      def create(object_type, payload)
+        klass = get_object_class(object_type)
+        klass.new.update_attributes(payload)
       end
 
-      # Gets the object according to the operation sent by the server.
+      # Logic to handle object's update
       #
-      def get_object(payload, klass)
-        if new_record?(payload)
-          klass.new
-        else
-          id = payload.delete(:id)
-          klass.find(id)
-        end
-      end
-
-      # Check if a record sent in the payload if a new record. If it has an id,
-      # it is not a new one.
-      #
-      def new_record?(payload)
-        payload[:id].nil?
+      def update(object_type, payload)
+        klass = get_object_class(object_type)
+        guid = payload.delete(:guid)
+        klass.find_by(guid: guid).update_attributes(payload)
       end
 
       # Destroy a record from our database.
       #
-      def destroy(callback, klass, payload)
-        klass = get_object_class(callback, klass)
-        id = payload.delete(:id)
-        klass.find(id).destroy!
+      def destroy(klass, payload)
+        klass = get_object_class(klass)
+        guid = payload.delete(:guid)
+        klass.find_by(guid: guid).destroy!
       end
 
       # Gets the object class. First, it'll look the {MODEL_HANDLER} hash and
@@ -66,7 +57,7 @@ module ActiveEvent
       # not have a translation, this method will try to +constantize+ the
       # +object_type+.
       #
-      def get_object_class(callback, object_type)
+      def get_object_class(object_type)
         translated_object_type = MODEL_HANDLER[object_type]
         return constantize(translated_object_type) if translated_object_type
         constantize(object_type)

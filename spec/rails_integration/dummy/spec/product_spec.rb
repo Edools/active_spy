@@ -4,7 +4,7 @@ describe Product do
 
   it 'should send itself to a event-runner instance' do
     right_now = Time.now
-    product = Product.new name: 'Foo', id: 1, created_at: right_now,
+    product = Product.new name: 'Foo', id: 1, guid: '123', created_at: right_now,
       updated_at: right_now
 
     ActiveEvent::Configuration.instance_eval do
@@ -23,7 +23,7 @@ describe Product do
         event: {
           payload: {
             product: product.attributes,
-            action: 'save'
+            action: 'create'
           },
           realm: product.realm,
           actor: actor,
