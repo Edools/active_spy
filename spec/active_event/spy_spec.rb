@@ -30,6 +30,7 @@ describe ActiveEvent::Spy do
       end
 
       def foo
+        'I was called'
       end
     end
 
@@ -43,7 +44,7 @@ describe ActiveEvent::Spy do
 
     foo = Foo.new
     foo.bar
-    foo.foo
+    expect(foo.foo).to eql('I was called')
   end
 
 end
