@@ -31,14 +31,16 @@ module ActiveEvent
         send(callback, object_type, payload, actor, realm)
       end
 
-      # Logic to handle object's creation
+      # Logic to handle object's creation. You can override this, as you wish,
+      # to suit your own needs
       #
       def create(object_type, payload, _actor, _realm)
         klass = get_object_class(object_type)
         klass.new.update_attributes(payload)
       end
 
-      # Logic to handle object's update
+      # Logic to handle object's update. You can override this, as you wish,
+      # to suit your own needs
       #
       def update(object_type, payload, _actor, _realm)
         klass = get_object_class(object_type)
@@ -46,7 +48,8 @@ module ActiveEvent
         klass.find_by(guid: guid).update_attributes(payload)
       end
 
-      # Destroy a record from our database.
+      # Destroy a record from our database. You can override this, as you wish,
+      # to suit your own needs
       #
       def destroy(klass, payload, _actor, _realm)
         klass = get_object_class(klass)
