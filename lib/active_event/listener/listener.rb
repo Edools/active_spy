@@ -17,28 +17,30 @@ module ActiveEvent
         object_type = params.delete(:type)
         callback = params[:payload].delete(:action)
         payload_content = params.delete(:payload)[object_type.downcase.to_sym]
+        actor = params.delete(:actor)
+        realm = params.delete(:realm)
 
-        sync_database(callback, object_type, payload_content)
+        sync_database(callback, object_type, payload_content, actor, realm)
       end
 
       # Calls the proper method to sync the database. It will manipulate
       # objects of the class +object_type+, with the attributes sent in the
       # +payload+, triggered by the callback +callback+.
       #
-      def sync_database(callback, object_type, payload)
-        send(callback, object_type, payload)
+      def sync_database(callback, object_type, payload, actor, realm)
+        send(callback, object_type, payload, actor, realm)
       end
 
       # Logic to handle object's creation
       #
-      def create(object_type, payload)
+      def create(object_type, payload, _actor, _realm)
         klass = get_object_class(object_type)
         klass.new.update_attributes(payload)
       end
 
       # Logic to handle object's update
       #
-      def update(object_type, payload)
+      def update(object_type, payload, _actor, _realm)
         klass = get_object_class(object_type)
         guid = payload.delete(:guid)
         klass.find_by(guid: guid).update_attributes(payload)
@@ -46,7 +48,7 @@ module ActiveEvent
 
       # Destroy a record from our database.
       #
-      def destroy(klass, payload)
+      def destroy(klass, payload, _actor, _realm)
         klass = get_object_class(klass)
         guid = payload.delete(:guid)
         klass.find_by(guid: guid).destroy!

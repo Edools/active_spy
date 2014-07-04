@@ -16,6 +16,12 @@ describe ActiveEvent::Rails::EventHandler do
             name: 'Pedro'
           },
           action: 'create'
+        },
+        actor: {
+          type: 'User'
+        },
+        realm: {
+          type: 'UserRealm'
         }
       }
     end
@@ -24,8 +30,11 @@ describe ActiveEvent::Rails::EventHandler do
       params[:payload][:action] = 'create'
       expect_any_instance_of(User).to receive(:update_attributes)
         .with(name: 'Pedro')
-      expect(handler).to receive(:create).with('User', name: 'Pedro')
-        .and_call_original
+      expect(handler).to receive(:create).with('User',
+        hash_including(name: 'Pedro'),
+        hash_including(type: 'User'),
+        hash_including(type: 'UserRealm')
+      ).and_call_original
 
       handler.handle(params)
     end
@@ -37,8 +46,11 @@ describe ActiveEvent::Rails::EventHandler do
       expect_any_instance_of(User).to receive(:update_attributes)
         .with(name: 'Pedro')
       expect(User).to receive(:find_by).with(guid: 1).and_return(User.new)
-      expect(handler).to receive(:update).with('User', guid: 1, name: 'Pedro')
-        .and_call_original
+      expect(handler).to receive(:update).with('User',
+        hash_including(guid: 1, name: 'Pedro'),
+        hash_including(type: 'User'),
+        hash_including(type: 'UserRealm')
+      ).and_call_original
 
       handler.handle(params)
     end
@@ -49,8 +61,11 @@ describe ActiveEvent::Rails::EventHandler do
 
       expect(User).to receive(:find_by).with(guid: 1).and_return(User.new)
       expect_any_instance_of(User).to receive(:destroy!)
-      expect(handler).to receive(:destroy).with('User', guid: 1, name: 'Pedro')
-        .and_call_original
+      expect(handler).to receive(:destroy).with('User',
+        hash_including(guid: 1, name: 'Pedro'),
+        hash_including(type: 'User'),
+        hash_including(type: 'UserRealm')
+      ).and_call_original
 
       handler.handle(params)
     end

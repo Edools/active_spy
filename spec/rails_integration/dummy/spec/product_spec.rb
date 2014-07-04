@@ -12,12 +12,6 @@ describe Product do
       port '80'
     end
 
-    actor = double('actor')
-    expect(actor).to receive(:to_actor)
-    expect_any_instance_of(Product).to receive(:actor).and_return(actor)
-
-    product.actor = actor
-
     expect(RestClient).to receive(:post).with('http://google.com:80',
       hash_including(
         event: {
@@ -25,8 +19,8 @@ describe Product do
             product: product.attributes,
             action: 'create'
           },
-          realm: product.realm,
-          actor: actor,
+          realm: 'my realm',
+          actor: 'my actor',
           type: 'Product'
         }
       )

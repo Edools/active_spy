@@ -27,6 +27,16 @@ module ActiveEvent
           end
         end
 
+        # Class method to define the actor of the model.
+        #
+        def model_actor(actor_name = nil, &block)
+          actor = -> { send(actor_name) } if actor_name
+          actor = block if block_given?
+          define_method :actor do
+            actor.call
+          end
+        end
+
         # Helper to use on Rails app and watch for model creation, update and
         # destruction.
         #

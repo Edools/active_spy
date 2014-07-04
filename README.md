@@ -78,6 +78,33 @@ end
 
 You may override `payload_for(method)` and `realm` for more complex use cases.
 
+Create a configuration that will tell the gem where to send the requests:
+
+```ruby
+ActiveEvent.Configuration.instance_eval do
+  host 'http://somehost.com'
+  port '1234'
+end
+```
+
+Now, when you can create, update or delete instances of User, a request will be
+sent to the `host` and `port` defined in the configuration object. The body
+will be filled with a hash like this, as json:
+
+```
+{
+  type:     'User',         # object's class name
+  actor:    user.actor,     # object's actor (who made that action)
+  realm:    user.realm,     # object's realm
+  payload:  {               # a hash with the user attributes inside the 'user'
+    user: user.attributes,  # key and the executed action
+    action: action
+  }
+}
+```
+
+Just to remember, you can override `#realm` and `#payload_for(method)` to suit
+your own needs.
 
 ## Contributing to active_event
 
