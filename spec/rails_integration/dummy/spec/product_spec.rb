@@ -17,8 +17,8 @@ describe Product do
         event: {
           payload: {
             product: product.attributes,
-            action: 'create'
           },
+          action: 'create',
           realm: 'my realm',
           actor: 'my actor',
           type: 'Product'

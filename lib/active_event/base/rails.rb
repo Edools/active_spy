@@ -60,7 +60,8 @@ module ActiveEvent
           type:     @object.class.name,
           actor:    @object.actor,
           realm:    @object.realm,
-          payload:  @object.payload_for(action).merge(action: action)
+          payload:  @object.payload_for(action),
+          action:   action
         }
       end
 
