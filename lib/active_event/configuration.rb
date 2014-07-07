@@ -63,7 +63,7 @@ module ActiveEvent
       # See how are the event settings
       #
       # @return [Hash] actual event settings
-      def settings
+      def event_settings
         { host: @event_host, port: @event_port }
       end
     end
