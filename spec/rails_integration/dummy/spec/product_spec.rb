@@ -30,25 +30,45 @@ describe Product do
     expect(product.realm).to eql('my realm')
   end
 
-  it 'should register service when register_service is called' do
-    ActiveEvent::Configuration.instance_eval do
-      name 'service-name'
-      host 'http://google.com'
-      port '80'
-      event_host 'http://event.com'
-      event_port '443'
+  context 'service registration' do
+    before(:each) do
+      ActiveEvent::Configuration.instance_eval do
+        name 'service-name'
+        host 'http://google.com'
+        port '80'
+        event_host 'http://event.com'
+        event_port '443'
+      end
     end
 
-    expect(RestClient).to receive(:post).with('http://event.com:443/services',
-      hash_including(
-        service: {
-          name: 'service-name',
-          hostname: 'http://google.com',
-          port: '80'
-        }
-      )
-    )
+    it 'should register service when register_service is called' do
+      response = double('response')
+      expect(response).to receive(:code).and_return(404)
 
-    ActiveEvent.register_service
+      expect(RestClient).to receive(:get).
+        with('http://event.com:443/services/service-name').and_return(response)
+
+      expect(RestClient).to receive(:post).with('http://event.com:443/services',
+        hash_including(
+          service: {
+            name: 'service-name',
+            hostname: 'http://google.com',
+            port: '80'
+          }
+        )
+      )
+
+      ActiveEvent.register_service
+    end
+
+    it 'should not register itself if already registrated' do
+      response = double('response')
+      expect(response).to receive(:code).and_return(200)
+
+      expect(RestClient).to receive(:get).
+        with('http://event.com:443/services/service-name').and_return(response)
+
+      ActiveEvent.register_service
+    end
   end
 end

@@ -11,10 +11,6 @@ module ActiveEvent
         @object = object
       end
 
-      def self.path(path)
-        @path = path
-      end
-
       # Overriding to avoid sending the object to server 2 times (in both
       # before and after callabcks).
       #
