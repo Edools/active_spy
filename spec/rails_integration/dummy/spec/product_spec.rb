@@ -35,16 +35,20 @@ describe Product do
       name 'service-name'
       host 'http://google.com'
       port '80'
+      event_host 'http://event.com'
+      event_port '443'
     end
 
-    expect(RestClient).to receive(:post).with('http://google.com:80/',
+    expect(RestClient).to receive(:post).with('http://event.com:443/services',
       hash_including(
         service: {
           name: 'service-name',
           hostname: 'http://google.com',
-          port: 80
+          port: '80'
         }
       )
     )
+
+    ActiveEvent.register_service
   end
 end

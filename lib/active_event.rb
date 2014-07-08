@@ -10,10 +10,15 @@ require 'active_event/listener/listener'
 # Base module for the gem
 #
 module ActiveEvent
-  def self.register_service
-    host = ActiveEvent::Configuration.host
-    port = ActiveEvent::Configuration.port
-    RestClient.post "#{host}:#{port}/services",
-      service: ActiveEvent::Configuration.settings
+
+  # Class method to register the service in an event-runner instance.
+  #
+  if defined?(Rails)
+    def self.register_service
+      host = ActiveEvent::Configuration.event_host
+      port = ActiveEvent::Configuration.event_port
+      RestClient.post "#{host}:#{port}/services",
+        service: ActiveEvent::Configuration.settings
+    end
   end
 end
