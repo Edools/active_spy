@@ -12,7 +12,7 @@ describe Product do
       port '80'
     end
 
-    expect(RestClient).to receive(:post).with('http://google.com:80',
+    expect(RestClient).to receive(:post).with('http://google.com:80/',
       hash_including(
         event: {
           payload: {
@@ -28,5 +28,23 @@ describe Product do
 
     product.save
     expect(product.realm).to eql('my realm')
+  end
+
+  it 'should register service when register_service is called' do
+    ActiveEvent::Configuration.instance_eval do
+      name 'service-name'
+      host 'http://google.com'
+      port '80'
+    end
+
+    expect(RestClient).to receive(:post).with('http://google.com:80/',
+      hash_including(
+        service: {
+          name: 'service-name',
+          hostname: 'http://google.com',
+          port: 80
+        }
+      )
+    )
   end
 end

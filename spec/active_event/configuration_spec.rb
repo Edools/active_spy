@@ -19,6 +19,6 @@ describe ActiveEvent::Configuration do
       host 'localhost'
       port '8888'
     end
-    expect(Configuration.settings).to eql host: 'localhost', port: '8888'
+    expect(Configuration.settings).to eql name: nil, hostname: 'localhost', port: '8888'
   end
 end

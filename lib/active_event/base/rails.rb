@@ -15,11 +15,6 @@ module ActiveEvent
         @path = path
       end
 
-      def self.register_service
-        RestClient.post "#{host}:#{port}/services",
-          service: ActiveEvent::Configuration.settings
-      end
-
       # Overriding to avoid sending the object to server 2 times (in both
       # before and after callabcks).
       #
