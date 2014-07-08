@@ -3,8 +3,7 @@ module ActiveEvent
   #
   class Configuration
     class << self
-      # Set the default event-runner host
-      #
+      # Set the application host
       #
       # @param [String] host to set
       #
@@ -14,8 +13,7 @@ module ActiveEvent
         @host
       end
 
-      # Set the default event-runner port
-      #
+      # Set the application port
       #
       # @param [String] port to set
       #
@@ -25,11 +23,48 @@ module ActiveEvent
         @port
       end
 
+      # Set the application name
+      #
+      # @param [String] name to set
+      #
+      # @return [String] the name set
+      def name(name = nil)
+        @name = name unless name.nil?
+        @name
+      end
+
+      # Set the default event-runner host
+      #
+      # @param [String] host to set
+      #
+      # @return [String] the host set
+      def event_host(host = nil)
+        @event_host = host unless host.nil?
+        @event_host
+      end
+
+      # Set the default event-runner port
+      #
+      # @param [String] port to set
+      #
+      # @return [String] the port set
+      def event_port(port = nil)
+        @event_port = port unless port.nil?
+        @event_port
+      end
+
       # See how are the settings
       #
       # @return [Hash] actual settings
       def settings
-        { host: @host, port: @port }
+        { name: @name, hostname: @host, port: @port }
+      end
+
+      # See how are the event settings
+      #
+      # @return [Hash] actual event settings
+      def event_settings
+        { host: @event_host, port: @event_port }
       end
     end
   end

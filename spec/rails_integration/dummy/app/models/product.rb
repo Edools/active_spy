@@ -1,14 +1,7 @@
 class Product < ActiveRecord::Base
 
-  watch_method :save
-
-
-  def payload_for(method)
-    to_json
-  end
-
-  def realm
-    'my realm'
-  end
+  watch_model_changes
+  model_realm { 'my realm' }
+  model_actor { 'my actor' }
 
 end

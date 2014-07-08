@@ -4,7 +4,7 @@ describe Product do
 
   it 'should send itself to a event-runner instance' do
     right_now = Time.now
-    product = Product.new name: 'Foo', id: 1, created_at: right_now,
+    product = Product.new name: 'Foo', id: 1, guid: '123', created_at: right_now,
       updated_at: right_now
 
     ActiveEvent::Configuration.instance_eval do
@@ -12,23 +12,21 @@ describe Product do
       port '80'
     end
 
-    actor = double('actor')
-    expect(actor).to receive(:to_actor)
-    expect_any_instance_of(Product).to receive(:actor).and_return(actor)
-
-    product.actor = actor
-
     expect(RestClient).to receive(:post).with('http://google.com:80',
-      hash_including({
-        payload: product.to_json,
-        realm: product.realm,
-        actor: actor,
-        type: 'save'
-      })
+      hash_including(
+        event: {
+          payload: {
+            product: product.attributes,
+          },
+          action: 'create',
+          realm: 'my realm',
+          actor: 'my actor',
+          type: 'Product'
+        }
+      )
     )
 
     product.save
-
+    expect(product.realm).to eql('my realm')
   end
-
 end

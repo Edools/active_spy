@@ -19,11 +19,13 @@ Jeweler::Tasks.new do |gem|
   gem.homepage = 'http://github.com/edools/active_event'
   gem.license = 'MIT'
   gem.summary = <<-SUMMARY
-    Send model events to a server, receive and process them elsewhere.
+    Watch for a method call in any class and run before/after callbacks.
+    Has good integration with Rails.
   SUMMARY
   gem.description = <<-DESC
-    With this gem you can watch your models for events (like create, update,
-    delete), send these events to a event-runner instance and it redirect these
+    Watch for a method call in any class and run before/after callbacks.
+    You can even watch your Rails models for events (like create, update,
+    destroy), send these events to a event-runner instance and it redirect these
     events to other apps that are subscrived for them. This gem also provides
     classes that you can use to process the received events too.
   DESC
