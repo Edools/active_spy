@@ -14,7 +14,8 @@ require 'active_event/rails/listener'
 #
 module ActiveEvent
   if defined?(Rails)
-    # Class method to set the service's name, host and port
+    # @!method self.configure
+    # Class method to set the service's name, host and port.
     #
     def self.configure
       Configuration.instance_eval do
@@ -22,6 +23,7 @@ module ActiveEvent
       end
     end
 
+    # @!method self.register_service
     # Class method to register the service in an event-runner instance.
     #
     def self.register_service
@@ -33,6 +35,10 @@ module ActiveEvent
       RestClient.post @@base_url, service: ActiveEvent::Configuration.settings
     end
 
+    # @!method self.service_registered?
+    # Check if the service was already registetered in the configured event
+    # runner instance.
+    #
     def self.service_registered?
       name = ActiveEvent::Configuration.name
       r = RestClient.get "#{@@base_url}/#{name.downcase.gsub(' ', '-').strip}"

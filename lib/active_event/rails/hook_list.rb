@@ -9,6 +9,10 @@ module ActiveEvent
       # Initialize an empty hook list
       #
       def initialize
+        host = ActiveEvent::Configuration.event_host
+        port = ActiveEvent::Configuration.event_port
+        name = ActiveEvent::Configuration.name.downcase.gsub(' ', '-').strip
+        @base_service_url = "#{host}:#{port}/services/#{name}"
         @hooks = []
       end
 
@@ -19,6 +23,8 @@ module ActiveEvent
         instance.send(method, *args, &block)
       end
 
+      # Clear the hook list.
+      #
       def clear
         @hooks = []
       end
@@ -40,13 +46,15 @@ module ActiveEvent
         add_hooks(hooks_to_add) unless hooks_to_add.empty?
       end
 
+      # Get the old hooks list for this service from the event-runner
+      #
       def get_old_hooks
-        host = ActiveEvent::Configuration.event_host
-        port = ActiveEvent::Configuration.event_port
-        name = ActiveEvent::Configuration.name.downcase.gsub(' ', '-').strip
-        JSON.load(RestClient.get("#{host}:#{port}/services/#{name}"))['hooks']
+
+        JSON.load(RestClient.get(@base_service_url))['hooks']
       end
 
+      # Select from old hooks those that should be deleted from event runner.
+      #
       def get_hooks_to_delete(old_hooks)
         hooks_to_delete = []
         old_hooks.each do |old_hook|
@@ -63,6 +71,9 @@ module ActiveEvent
         hooks_to_delete
       end
 
+      # Select from the hooks defined in the app those that should be created
+      # in the event runner.
+      #
       def get_hooks_to_add(old_hooks)
         hooks_to_add = []
         @hooks.each do |hook|
@@ -79,21 +90,19 @@ module ActiveEvent
         hooks_to_add
       end
 
+      # Properly delete the +hooks_to_delete+ in the event runner.
+      #
       def delete_hooks(hooks_to_delete)
-        host = ActiveEvent::Configuration.event_host
-        port = ActiveEvent::Configuration.event_port
-        name = ActiveEvent::Configuration.name.downcase.gsub(' ', '-').strip
         hooks_to_delete.each do |hook|
-          RestClient.delete "#{host}:#{port}/services/#{name}/hooks/#{hook['id']}"
+          RestClient.delete "#{@base_service_url}/hooks/#{hook['id']}"
         end
       end
 
+      # # Properly creates the +hooks_to_add+ in the event runner..
+      #
       def add_hooks(hooks_to_add)
-        host = ActiveEvent::Configuration.event_host
-        port = ActiveEvent::Configuration.event_port
-        name = ActiveEvent::Configuration.name.downcase.gsub(' ', '-').strip
         hooks_to_add.each do |hook|
-          RestClient.post "#{host}:#{port}/services/#{name}/hooks", {
+          RestClient.post "#{@base_service_url}/hooks", {
             'class'=> hook['class'],
             'postPath' => ActiveEvent::Engine.routes.url_helpers.notifications_path(hook['class'].downcase),
             'active' => true
