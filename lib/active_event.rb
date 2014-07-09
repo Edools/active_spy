@@ -10,8 +10,16 @@ require 'active_event/listener/listener'
 # Base module for the gem
 #
 module ActiveEvent
-
   if defined?(Rails)
+
+    # Class method to set the service's name, host and port
+    #
+    def self.configure
+      Configuration.instance_eval do
+        yield(self)
+      end
+    end
+
     # Class method to register the service in an event-runner instance.
     #
     def self.register_service

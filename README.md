@@ -50,13 +50,13 @@ the `environments.rb` file to idenfity your service and the location of the
 event runner instance:
 
 ```ruby
-ActiveEvent::Configuration.instance_eval do
-  name 'my service name'
-  host 'http://my-service-host.com'
-  port '123'
+ActiveEventconfigure do |config|
+  config.name 'my service name'
+  config.host 'http://my-service-host.com'
+  config.port '123'
 
-  event_host 'http://event-runner-host.com'
-  event_port '456'
+  config.event_host 'http://event-runner-host.com'
+  config.event_port '456'
 end
 ```
 
@@ -112,13 +112,13 @@ Create a configuration that will tell the gem where to send the requests and
 identify the service that is sending them:
 
 ```ruby
-ActiveEvent.Configuration.instance_eval do
-  name  'my service name'
-  host 'http://my-service-host.com'
-  port '1234'
-
-  event_host 'http://event-runner-host.com'
-  event_port '5678'
+<<<<<<< HEAD
+ActiveEvent.configure do |config|
+  config.name 'my service name'
+  config.host 'http://somehost.com'
+  config.port '1234'
+  config.event_host 'http://event-runner-host.com'
+  config.event_port '5678'
 end
 ```
 

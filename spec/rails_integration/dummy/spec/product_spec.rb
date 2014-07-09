@@ -7,9 +7,9 @@ describe Product do
     product = Product.new name: 'Foo', id: 1, guid: '123', created_at: right_now,
       updated_at: right_now
 
-    ActiveEvent::Configuration.instance_eval do
-      host 'http://google.com'
-      port '80'
+    ActiveEvent.configure do |config|
+      config.host 'http://google.com'
+      config.port '80'
     end
 
     expect(RestClient).to receive(:post).with('http://google.com:80/',
@@ -32,12 +32,12 @@ describe Product do
 
   context 'service registration' do
     before(:each) do
-      ActiveEvent::Configuration.instance_eval do
-        name 'service-name'
-        host 'http://google.com'
-        port '80'
-        event_host 'http://event.com'
-        event_port '443'
+      ActiveEvent.configure do |config|
+        config.name 'service-name'
+        config.host 'http://google.com'
+        config.port '80'
+        config.event_host 'http://event.com'
+        config.event_port '443'
       end
     end
 

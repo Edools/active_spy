@@ -15,9 +15,9 @@ describe ActiveEvent::Configuration do
   end
 
   it 'should be able to return a hash of attributes' do
-    Configuration.instance_eval do
-      host 'localhost'
-      port '8888'
+    ActiveEvent.configure do |config|
+      config.host 'localhost'
+      config.port '8888'
     end
     expect(Configuration.settings).to eql name: nil, hostname: 'localhost', port: '8888'
   end
