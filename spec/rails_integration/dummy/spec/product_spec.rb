@@ -8,8 +8,8 @@ describe Product do
       updated_at: right_now
 
     ActiveEvent.configure do |config|
-      config.host 'http://google.com'
-      config.port '80'
+      config.event_host 'http://google.com'
+      config.event_port '80'
     end
 
     expect(RestClient).to receive(:post).with('http://google.com:80/',
@@ -69,6 +69,75 @@ describe Product do
         with('http://event.com:443/services/service-name').and_return(response)
 
       ActiveEvent.register_service
+    end
+
+    context 'hooks management' do
+      it 'should check if the hooks are in sync with event runner' do
+        ActiveEvent::Rails::HookList.clear
+        hooks = {
+          'hooks' => [
+            {
+              'class' => 'Product',
+              'postPath' => '/notifications/product',
+              'active' => true
+            }
+          ]
+        }
+
+        expect(RestClient).to receive(:get).with(
+          'http://event.com:443/services/service-name',
+          ).and_return(hooks.to_json)
+
+        class ProductListener < ActiveEvent::Rails::EventHandler
+        end
+
+        ActiveEvent::Rails::HookList.register
+      end
+
+      it 'should delete hooks that are not needed anymore' do
+        ActiveEvent::Rails::HookList.clear
+        hooks = {
+          'hooks' => [
+            {
+              'id' => '1',
+              'class' => 'Product',
+              'postPath' => '/notifications/product',
+              'active' => true
+            }
+          ]
+        }
+
+        expect(RestClient).to receive(:get).with(
+          'http://event.com:443/services/service-name',
+        ).and_return(hooks.to_json)
+
+        expect(RestClient).to receive(:delete).with(
+          'http://event.com:443/services/service-name/hooks/1',
+        )
+
+        ActiveEvent::Rails::HookList.register
+      end
+
+      it 'should add hooks that are not in event runner yet' do
+        ActiveEvent::Rails::HookList.clear
+
+        expect(RestClient).to receive(:get).with(
+          'http://event.com:443/services/service-name',
+        ).and_return({'hooks' => []}.to_json)
+
+        expect(RestClient).to receive(:post).with(
+          'http://event.com:443/services/service-name/hooks', {
+            'class' => 'User',
+            'postPath' => '/active_event/notifications/user',
+            'active' => true
+          }
+        )
+
+        class UserListener < ActiveEvent::Rails::EventHandler
+        end
+
+        ActiveEvent::Rails::HookList.register
+      end
     end
   end
 end
