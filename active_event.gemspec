@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.require_paths = ["lib"]
   s.authors = ["Douglas Camata"]
-  s.date = "2014-07-08"
+  s.date = "2014-07-09"
   s.description = "    Watch for a method call in any class and run before/after callbacks.\n    You can even watch your Rails models for events (like create, update,\n    destroy), send these events to a event-runner instance and it redirect these\n    events to other apps that are subscrived for them. This gem also provides\n    classes that you can use to process the received events too.\n"
   s.email = "d.camata@gmail.com"
   s.extra_rdoc_files = [
@@ -31,15 +31,20 @@ Gem::Specification.new do |s|
     "README.md",
     "Rakefile",
     "VERSION",
+    "active_event.gemspec",
+    "app/controllers/active_event/notifications_controller.rb",
+    "config/routes.rb",
     "lib/active_event.rb",
-    "lib/active_event/base/base.rb",
-    "lib/active_event/base/rails.rb",
+    "lib/active_event/base.rb",
     "lib/active_event/configuration.rb",
-    "lib/active_event/listener/listener.rb",
-    "lib/active_event/railtie.rb",
+    "lib/active_event/rails/base.rb",
+    "lib/active_event/rails/engine.rb",
+    "lib/active_event/rails/hook_list.rb",
+    "lib/active_event/rails/listener.rb",
+    "lib/active_event/rails/railtie.rb",
+    "lib/active_event/rails/spy.rb",
     "lib/active_event/spy/spy.rb",
     "lib/active_event/spy/spy_list.rb",
-    "lib/active_event/spy/spy_rails.rb",
     "spec/active_event/base_spec.rb",
     "spec/active_event/configuration_spec.rb",
     "spec/active_event/rails_event_handler_spec.rb",

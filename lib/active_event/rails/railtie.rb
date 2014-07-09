@@ -10,10 +10,4 @@ class Railtie < Rails::Railtie
       include ActiveEvent::Rails::Spy
     end
   end
-
-  config.after_initialize do
-    Rails.application.eager_load!
-    ActiveEvent::SpyList.activate
-    # ActiveEvent::Rails::HookList.register
-  end
 end

@@ -27,6 +27,7 @@ module ActiveEvent
     # in their classes.
     #
     def activate
+      Rails.application.eager_load! if defined?(Rails)
       @spies.each do |spy|
         spied_class = spy['class']
         spied_method = spy['method']
