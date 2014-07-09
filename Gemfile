@@ -4,6 +4,7 @@ source 'http://rubygems.org'
 #   gem "activesupport", ">= 2.3.5"
 gem 'activesupport', '~> 4.1.2'
 gem 'rest-client'
+gem 'hashie'
 
 # Add dependencies to develop your gem here.
 # Include everything needed to run rake, tests, features, etc.
