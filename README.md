@@ -144,17 +144,21 @@ to suit your own needs.
 
 #### Handling the request received by the event runner
 
-To handle the request received by the event-runner, there's a class, named
-`ActiveEvent::Rails::EventHandler`. You can use it like this:
+To handle the request received by the event-runner, you will need to mount
+the `ActiveEvent::Engine` in your `routes.rb` file:
+
+```ruby
+Rails.application.routes.draw do
+  mount ActiveEvent::Engine => 'active_event', as: :active_event
+end
+```
+
+Then, you need to create a listener class, inheriting from
+`ActiveEvent::Rails::EventHandler` and named using the watched model's name
+plus the `Listener` postfix, like this:
 
 ```ruby
 class UserListener < ActiveEvent::Rails::EventHandler
-end
-
-class NotificationController < ActiveController::Base
-  def notify
-    UserListener.handle(params)
-  end
 end
 ```
 
