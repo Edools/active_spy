@@ -1,4 +1,5 @@
 require 'rest-client'
+require 'singleton'
 
 module ActiveEvent
   # Module to hold Rails specific classes and helpers.
@@ -44,8 +45,8 @@ module ActiveEvent
       # after callback is not explicitly defined.
       #
       def method_missing(method, *_args, &_block)
-        host = ActiveEvent::Configuration.host
-        port = ActiveEvent::Configuration.port
+        host = ActiveEvent::Configuration.event_host
+        port = ActiveEvent::Configuration.event_port
 
         RestClient.post "#{host}:#{port}/",
           event: get_request_params(method)

@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+
+  mount ActiveEvent::Engine => 'active_event', as: :active_event
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

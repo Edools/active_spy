@@ -1,3 +1,6 @@
+require 'rest-client'
+require 'json'
+
 module ActiveEvent
   module Rails
     # Base class used to process the events received.
@@ -5,10 +8,22 @@ module ActiveEvent
     class EventHandler
       include ActiveSupport::Inflector
 
+
       # Constant to hold the model translations. The key is the incoming
       # +ref_type+ and the value is the matching model class.
       #
       MODEL_HANDLER = {}
+
+      # Store the event handler hook in the {ActiveEvent::Rails::HookList} for
+      # later registration of them within the event runner.
+      #
+      def self.inherited(child)
+        if child.name.include? 'Listener'
+          ActiveEvent::Rails::HookList << {
+            'class' => child.name.split('Listener')[0]
+          }
+        end
+      end
 
       # Handle a request with +params+ and sync the database according to
       # them.
