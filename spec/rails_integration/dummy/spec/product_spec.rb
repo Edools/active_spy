@@ -12,7 +12,7 @@ describe Product do
       port '80'
     end
 
-    expect(RestClient).to receive(:post).with('http://google.com:80',
+    expect(RestClient).to receive(:post).with('http://google.com:80/',
       hash_including(
         event: {
           payload: {

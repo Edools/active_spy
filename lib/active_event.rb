@@ -10,4 +10,11 @@ require 'active_event/listener/listener'
 # Base module for the gem
 #
 module ActiveEvent
+  if defined?(Rails)
+    def self.configure
+      Configuration.instance_eval do
+        yield(self)
+      end
+    end
+  end
 end

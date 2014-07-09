@@ -81,9 +81,9 @@ You may override `payload_for(method)` and `realm` for more complex use cases.
 Create a configuration that will tell the gem where to send the requests:
 
 ```ruby
-ActiveEvent.Configuration.instance_eval do
-  host 'http://somehost.com'
-  port '1234'
+ActiveEvent.configure do
+  config.host 'http://somehost.com'
+  config.port '1234'
 end
 ```
 
