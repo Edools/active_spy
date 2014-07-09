@@ -3,7 +3,7 @@ source 'http://rubygems.org'
 # Example:
 #   gem "activesupport", ">= 2.3.5"
 gem 'activesupport', '~> 4.1.2'
-gem 'rest-client'
+gem 'rest-client', '1.6.7'
 gem 'hashie'
 
 # Add dependencies to develop your gem here.

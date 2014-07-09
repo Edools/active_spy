@@ -45,28 +45,12 @@ Chair.new.break!
 
 ### Rails app
 
-First of all, you need to set your configuration using the proper object in
-the `environments.rb` file to idenfity your service and the location of the
-event runner instance:
+First of all, run the install generator: `rails g active_event:install`.
+This command will generate `config/initializers/active_event.rb` and
+`config/active_event.yml`. You must edit the YAML file to use your own app
+parameters.
 
-```ruby
-ActiveEventconfigure do |config|
-  config.name 'my service name'
-  config.host 'http://my-service-host.com'
-  config.port '123'
-
-  config.event_host 'http://event-runner-host.com'
-  config.event_port '456'
-end
-```
-
-Then, you have to register your service an in `initializer`:
-
-```ruby
-ActiveEvent.register_service
-```
-
-Create a `ProductEvent` class at  `RAILS_ROOT/app/events`
+Then, create a `ProductEvent` class at  `RAILS_ROOT/app/events`
 
 ```ruby
 class ProductEvents < ActiveEvent::Rails::Base
@@ -108,22 +92,8 @@ end
 You may override `payload_for(method)`, `realm` and `actor` for more complex
 use cases.
 
-Create a configuration that will tell the gem where to send the requests and
-identify the service that is sending them:
-
-```ruby
-<<<<<<< HEAD
-ActiveEvent.configure do |config|
-  config.name 'my service name'
-  config.host 'http://somehost.com'
-  config.port '1234'
-  config.event_host 'http://event-runner-host.com'
-  config.event_port '5678'
-end
-```
-
 Now, when you can create, update or delete instances of User, a request will be
-sent to the `event_host` and `event_port` defined in the configuration object.
+sent to the `event_host` and `event_port` defined in the configuration YAML file.
 The body will be filled with a hash like this, as json:
 
 ```

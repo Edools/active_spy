@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.require_paths = ["lib"]
   s.authors = ["Douglas Camata"]
-  s.date = "2014-07-08"
+  s.date = "2014-07-09"
   s.description = "    Watch for a method call in any class and run before/after callbacks.\n    You can even watch your Rails models for events (like create, update,\n    destroy), send these events to a event-runner instance and it redirect these\n    events to other apps that are subscrived for them. This gem also provides\n    classes that you can use to process the received events too.\n"
   s.email = "d.camata@gmail.com"
   s.extra_rdoc_files = [
@@ -31,15 +31,24 @@ Gem::Specification.new do |s|
     "README.md",
     "Rakefile",
     "VERSION",
+    "active_event.gemspec",
+    "app/controllers/active_event/notifications_controller.rb",
+    "config/initializers/active_event_configuration_loader.rb",
+    "config/routes.rb",
     "lib/active_event.rb",
-    "lib/active_event/base/base.rb",
-    "lib/active_event/base/rails.rb",
+    "lib/active_event/base.rb",
     "lib/active_event/configuration.rb",
-    "lib/active_event/listener/listener.rb",
-    "lib/active_event/railtie.rb",
+    "lib/active_event/rails/base.rb",
+    "lib/active_event/rails/engine.rb",
+    "lib/active_event/rails/hook_list.rb",
+    "lib/active_event/rails/listener.rb",
+    "lib/active_event/rails/railtie.rb",
+    "lib/active_event/rails/spy.rb",
     "lib/active_event/spy/spy.rb",
     "lib/active_event/spy/spy_list.rb",
-    "lib/active_event/spy/spy_rails.rb",
+    "lib/rails/generators/active_event/install/install_generator.rb",
+    "lib/rails/generators/active_event/install/templates/active_event.yml",
+    "lib/rails/generators/active_event/install/templates/initializer.rb",
     "spec/active_event/base_spec.rb",
     "spec/active_event/configuration_spec.rb",
     "spec/active_event/rails_event_handler_spec.rb",
@@ -68,6 +77,7 @@ Gem::Specification.new do |s|
     "spec/rails_integration/dummy/bin/rails",
     "spec/rails_integration/dummy/bin/rake",
     "spec/rails_integration/dummy/config.ru",
+    "spec/rails_integration/dummy/config/active_event.yml",
     "spec/rails_integration/dummy/config/application.rb",
     "spec/rails_integration/dummy/config/boot.rb",
     "spec/rails_integration/dummy/config/database.yml",
@@ -75,6 +85,7 @@ Gem::Specification.new do |s|
     "spec/rails_integration/dummy/config/environments/development.rb",
     "spec/rails_integration/dummy/config/environments/production.rb",
     "spec/rails_integration/dummy/config/environments/test.rb",
+    "spec/rails_integration/dummy/config/initializers/active_event.rb",
     "spec/rails_integration/dummy/config/initializers/assets.rb",
     "spec/rails_integration/dummy/config/initializers/backtrace_silencers.rb",
     "spec/rails_integration/dummy/config/initializers/cookies_serializer.rb",
@@ -114,7 +125,8 @@ Gem::Specification.new do |s|
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
       s.add_runtime_dependency(%q<activesupport>, ["~> 4.1.2"])
-      s.add_runtime_dependency(%q<rest-client>, [">= 0"])
+      s.add_runtime_dependency(%q<rest-client>, ["= 1.6.7"])
+      s.add_runtime_dependency(%q<hashie>, [">= 0"])
       s.add_development_dependency(%q<activerecord>, ["~> 4.1.2"])
       s.add_development_dependency(%q<rails>, ["~> 4.1.2"])
       s.add_development_dependency(%q<rubocop>, ["~> 0.24.0"])
@@ -127,7 +139,8 @@ Gem::Specification.new do |s|
       s.add_development_dependency(%q<simplecov>, [">= 0"])
     else
       s.add_dependency(%q<activesupport>, ["~> 4.1.2"])
-      s.add_dependency(%q<rest-client>, [">= 0"])
+      s.add_dependency(%q<rest-client>, ["= 1.6.7"])
+      s.add_dependency(%q<hashie>, [">= 0"])
       s.add_dependency(%q<activerecord>, ["~> 4.1.2"])
       s.add_dependency(%q<rails>, ["~> 4.1.2"])
       s.add_dependency(%q<rubocop>, ["~> 0.24.0"])
@@ -141,7 +154,8 @@ Gem::Specification.new do |s|
     end
   else
     s.add_dependency(%q<activesupport>, ["~> 4.1.2"])
-    s.add_dependency(%q<rest-client>, [">= 0"])
+    s.add_dependency(%q<rest-client>, ["= 1.6.7"])
+    s.add_dependency(%q<hashie>, [">= 0"])
     s.add_dependency(%q<activerecord>, ["~> 4.1.2"])
     s.add_dependency(%q<rails>, ["~> 4.1.2"])
     s.add_dependency(%q<rubocop>, ["~> 0.24.0"])

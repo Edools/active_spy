@@ -1,0 +1,20 @@
+test:
+    name: dummy
+    host: http://dummy.com
+    port: 80
+    event_host: http://event-runner.com
+    event_port: 443
+
+development:
+    name: dummy
+    host: http://dummy.com
+    port: 80
+    event_host: http://event-runner.com
+    event_port: 443
+
+production:
+    name: dummy
+    host: http://dummy.com
+    port: 80
+    event_host: http://event-runner.com
+    event_port: 443
