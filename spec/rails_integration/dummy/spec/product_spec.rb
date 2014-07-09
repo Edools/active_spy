@@ -7,12 +7,7 @@ describe Product do
     product = Product.new name: 'Foo', id: 1, guid: '123', created_at: right_now,
       updated_at: right_now
 
-    ActiveEvent.configure do |config|
-      config.event_host 'http://google.com'
-      config.event_port '80'
-    end
-
-    expect(RestClient).to receive(:post).with('http://google.com:80/',
+    expect(RestClient).to receive(:post).with('http://event-runner.com:443/',
       hash_including(
         event: {
           payload: {
@@ -31,28 +26,18 @@ describe Product do
   end
 
   context 'service registration' do
-    before(:each) do
-      ActiveEvent.configure do |config|
-        config.name 'service-name'
-        config.host 'http://google.com'
-        config.port '80'
-        config.event_host 'http://event.com'
-        config.event_port '443'
-      end
-    end
-
     it 'should register service when register_service is called' do
       response = double('response')
       expect(response).to receive(:code).and_return(404)
 
       expect(RestClient).to receive(:get).
-        with('http://event.com:443/services/service-name').and_return(response)
+        with('http://event-runner.com:443/services/dummy').and_return(response)
 
-      expect(RestClient).to receive(:post).with('http://event.com:443/services',
+      expect(RestClient).to receive(:post).with('http://event-runner.com:443/services',
         hash_including(
           service: {
-            name: 'service-name',
-            hostname: 'http://google.com',
+            name: 'dummy',
+            hostname: 'http://dummy.com',
             port: '80'
           }
         )
@@ -66,7 +51,7 @@ describe Product do
       expect(response).to receive(:code).and_return(200)
 
       expect(RestClient).to receive(:get).
-        with('http://event.com:443/services/service-name').and_return(response)
+        with('http://event-runner.com:443/services/dummy').and_return(response)
 
       ActiveEvent.register_service
     end
@@ -85,7 +70,7 @@ describe Product do
         }
 
         expect(RestClient).to receive(:get).with(
-          'http://event.com:443/services/service-name',
+          'http://event-runner.com:443/services/dummy',
           ).and_return(hooks.to_json)
 
         class ProductListener < ActiveEvent::Rails::EventHandler
@@ -108,11 +93,11 @@ describe Product do
         }
 
         expect(RestClient).to receive(:get).with(
-          'http://event.com:443/services/service-name',
+          'http://event-runner.com:443/services/dummy',
         ).and_return(hooks.to_json)
 
         expect(RestClient).to receive(:delete).with(
-          'http://event.com:443/services/service-name/hooks/1',
+          'http://event-runner.com:443/services/dummy/hooks/1',
         )
 
         ActiveEvent::Rails::HookList.register
@@ -122,11 +107,11 @@ describe Product do
         ActiveEvent::Rails::HookList.clear
 
         expect(RestClient).to receive(:get).with(
-          'http://event.com:443/services/service-name',
+          'http://event-runner.com:443/services/dummy',
         ).and_return({'hooks' => []}.to_json)
 
         expect(RestClient).to receive(:post).with(
-          'http://event.com:443/services/service-name/hooks', {
+          'http://event-runner.com:443/services/dummy/hooks', {
             'class' => 'User',
             'postPath' => '/active_event/notifications/user',
             'active' => true
