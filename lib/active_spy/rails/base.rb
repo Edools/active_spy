@@ -60,8 +60,8 @@ module ActiveSpy
         action = get_action(real_method)
         {
           type:     @object.class.name,
-          actor:    @object.actor,
-          realm:    @object.realm,
+          actor:    @object.instance_variable_get('@actor'),
+          realm:    @object.instance_variable_get('@realm'),
           payload:  @object.payload_for(action),
           action:   action
         }

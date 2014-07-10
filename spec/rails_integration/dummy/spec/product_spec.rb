@@ -6,6 +6,9 @@ describe Product do
     right_now = Time.now
     product = Product.new name: 'Foo', id: 1, guid: '123', created_at: right_now,
       updated_at: right_now
+    product.actor = 'my actor'
+    product.my_realm = 'my realm'
+
 
     expect(RestClient).to receive(:post).with('http://event-runner.com:443/',
       hash_including(
@@ -22,7 +25,7 @@ describe Product do
     )
 
     product.save
-    expect(product.realm).to eql('my realm')
+    expect(product.my_realm).to eql('my realm')
   end
 
   context 'service registration' do
