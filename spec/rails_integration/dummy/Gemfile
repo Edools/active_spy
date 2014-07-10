@@ -8,4 +8,4 @@ gem 'spring-commands-rspec'
 gem 'pry'
 gem 'rails-pry'
 
-gem 'active_event', path: "../../../"
+gem 'active_spy', path: "../../../"

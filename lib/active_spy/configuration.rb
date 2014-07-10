@@ -1,4 +1,4 @@
-module ActiveEvent
+module ActiveSpy
   # Defines a class to hold the configuration used to send events.
   #
   class Configuration

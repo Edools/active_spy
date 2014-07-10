@@ -43,7 +43,7 @@ describe Product do
         )
       )
 
-      ActiveEvent.register_service
+      ActiveSpy.register_service
     end
 
     it 'should not register itself if already registrated' do
@@ -53,12 +53,12 @@ describe Product do
       expect(RestClient).to receive(:get).
         with('http://event-runner.com:443/services/dummy').and_return(response)
 
-      ActiveEvent.register_service
+      ActiveSpy.register_service
     end
 
     context 'hooks management' do
       it 'should check if the hooks are in sync with event runner' do
-        ActiveEvent::Rails::HookList.clear
+        ActiveSpy::Rails::HookList.clear
         hooks = {
           'hooks' => [
             {
@@ -73,14 +73,14 @@ describe Product do
           'http://event-runner.com:443/services/dummy',
           ).and_return(hooks.to_json)
 
-        class ProductListener < ActiveEvent::Rails::Listener
+        class ProductListener < ActiveSpy::Rails::Listener
         end
 
-        ActiveEvent::Rails::HookList.register
+        ActiveSpy::Rails::HookList.register
       end
 
       it 'should delete hooks that are not needed anymore' do
-        ActiveEvent::Rails::HookList.clear
+        ActiveSpy::Rails::HookList.clear
         hooks = {
           'hooks' => [
             {
@@ -100,11 +100,11 @@ describe Product do
           'http://event-runner.com:443/services/dummy/hooks/1',
         )
 
-        ActiveEvent::Rails::HookList.register
+        ActiveSpy::Rails::HookList.register
       end
 
       it 'should add hooks that are not in event runner yet' do
-        ActiveEvent::Rails::HookList.clear
+        ActiveSpy::Rails::HookList.clear
 
         expect(RestClient).to receive(:get).with(
           'http://event-runner.com:443/services/dummy',
@@ -113,15 +113,15 @@ describe Product do
         expect(RestClient).to receive(:post).with(
           'http://event-runner.com:443/services/dummy/hooks', {
             'class' => 'User',
-            'postPath' => '/active_event/notifications/user',
+            'postPath' => '/active_spy/notifications/user',
             'active' => true
           }
         )
 
-        class UserListener < ActiveEvent::Rails::Listener
+        class UserListener < ActiveSpy::Rails::Listener
         end
 
-        ActiveEvent::Rails::HookList.register
+        ActiveSpy::Rails::HookList.register
       end
     end
   end

@@ -1,4 +1,4 @@
-module ActiveEvent
+module ActiveSpy
   # Default template for callbacks handlers.
   #
   class Base

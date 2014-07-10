@@ -1,3 +1,3 @@
-class ProductEvents < ActiveEvent::Rails::Base
+class ProductEvents < ActiveSpy::Rails::Base
 
 end

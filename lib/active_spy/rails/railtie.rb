@@ -1,13 +1,13 @@
 require 'rails'
 
-# Railtie class to automatically include {ActiveEvent::Spy} in all
+# Railtie class to automatically include {ActiveSpy::Spy} in all
 # +ActiveRecord::Base+
 #
 class Railtie < Rails::Railtie
-  initializer 'active_event.spies' do
+  initializer 'active_spy.spies' do
     ActiveSupport.on_load(:active_record) do
-      include ActiveEvent::Spy
-      include ActiveEvent::Rails::Spy
+      include ActiveSpy::Spy
+      include ActiveSpy::Rails::Spy
     end
   end
 

@@ -1,4 +1,4 @@
-module ActiveEvent
+module ActiveSpy
   module Rails
     # Class used to hold all the events hook's paths and later sync
     # them with an event runner instance.
@@ -9,15 +9,15 @@ module ActiveEvent
       # Initialize an empty hook list
       #
       def initialize
-        host = ActiveEvent::Configuration.event_host
-        port = ActiveEvent::Configuration.event_port
-        name = ActiveEvent::Configuration.name.downcase.gsub(' ', '-').strip
+        host = ActiveSpy::Configuration.event_host
+        port = ActiveSpy::Configuration.event_port
+        name = ActiveSpy::Configuration.name.downcase.gsub(' ', '-').strip
         @base_service_url = "#{host}:#{port}/services/#{name}"
         @hooks = []
       end
 
-      # Proxy all methods called in the {ActiveEvent::Hook} to
-      # {ActiveEvent::Hook} instance. Just a syntax sugar.
+      # Proxy all methods called in the {ActiveSpy::Hook} to
+      # {ActiveSpy::Hook} instance. Just a syntax sugar.
       #
       def self.method_missing(method, *args, &block)
         instance.send(method, *args, &block)
@@ -104,7 +104,7 @@ module ActiveEvent
         hooks_to_add.each do |hook|
           RestClient.post "#{@base_service_url}/hooks", {
             'class'=> hook['class'],
-            'postPath' => ActiveEvent::Engine.routes.url_helpers.notifications_path(hook['class'].downcase),
+            'postPath' => ActiveSpy::Engine.routes.url_helpers.notifications_path(hook['class'].downcase),
             'active' => true
           }
         end

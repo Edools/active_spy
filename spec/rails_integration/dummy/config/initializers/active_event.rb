@@ -1,8 +1,8 @@
 Rails.application.eager_load!
-ActiveEvent::SpyList.activate
+ActiveSpy::SpyList.activate
 
 if Rails.env.production?
-  ActiveEvent.register_service
-  ActiveEvent::Rails::HookList.register
+  ActiveSpy.register_service
+  ActiveSpy::Rails::HookList.register
 end
 

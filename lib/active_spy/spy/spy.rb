@@ -1,11 +1,11 @@
 require 'active_support'
 
-module ActiveEvent
+module ActiveSpy
   # Module that defines methods used to spy on some class methods
   #
   module Spy
-    # Default snippet to extends the class with {ActiveEvent::Spy::ClassMethods}
-    # when {ActiveEvent::Spy} is included in it.
+    # Default snippet to extends the class with {ActiveSpy::Spy::ClassMethods}
+    # when {ActiveSpy::Spy} is included in it.
     #
     def self.included(base)
       base.extend ClassMethods
@@ -27,14 +27,14 @@ module ActiveEvent
       ActiveSupport::Inflector.constantize "#{self.class.name}Events"
     end
 
-    # Class methods to be defined in classes that includes {ActiveEvent::Spy}
+    # Class methods to be defined in classes that includes {ActiveSpy::Spy}
     #
     module ClassMethods
       # Set watchers for the +method+
       #
       def watch_method(*methods)
         methods.each do |method|
-          ActiveEvent::SpyList << { 'class' => name, 'method' => method }
+          ActiveSpy::SpyList << { 'class' => name, 'method' => method }
         end
       end
     end

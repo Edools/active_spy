@@ -1,7 +1,7 @@
 require 'active_support'
 require 'singleton'
 
-module ActiveEvent
+module ActiveSpy
   # Singleton used to hold the spies and lazely active these spies by patching
   # the methods in the specified classes.
   #
@@ -16,8 +16,8 @@ module ActiveEvent
 
     attr_reader :spies
 
-    # Proxy all methods called in the {ActiveEvent::SpyList} to
-    # {ActiveEvent::SpyList} instance. Just a syntax sugar.
+    # Proxy all methods called in the {ActiveSpy::SpyList} to
+    # {ActiveSpy::SpyList} instance. Just a syntax sugar.
     #
     def self.method_missing(method, *args, &block)
       instance.send(method, *args, &block)
@@ -46,7 +46,7 @@ module ActiveEvent
     # This method patches the +method+ in the class +klass+ to invoke the
     # callbacks defined in the respective class, that should be named using
     # appending 'Events' to the class' name, and inherites from
-    # {ActiveEvent::Base}.
+    # {ActiveSpy::Base}.
     #
     def patch(klass, method)
       ActiveSupport::Inflector.constantize(klass).class_eval do

@@ -1,7 +1,7 @@
 require 'rest-client'
 require 'json'
 
-module ActiveEvent
+module ActiveSpy
   module Rails
     # Base class used to process the events received.
     #
@@ -14,12 +14,12 @@ module ActiveEvent
       #
       MODEL_HANDLER = {}
 
-      # Store the event handler hook in the {ActiveEvent::Rails::HookList} for
+      # Store the event handler hook in the {ActiveSpy::Rails::HookList} for
       # later registration of them within the event runner.
       #
       def self.inherited(child)
         if child.name.include? 'Listener'
-          ActiveEvent::Rails::HookList << {
+          ActiveSpy::Rails::HookList << {
             'class' => child.name.split('Listener')[0]
           }
         end

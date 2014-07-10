@@ -1,12 +1,12 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-describe ActiveEvent::Spy do
+describe ActiveSpy::Spy do
 
   it 'should be able to watch on methods' do
 
     # Dummy event handler for the spec
     #
-    class FooEvents < ActiveEvent::Base
+    class FooEvents < ActiveSpy::Base
       def before_bar
       end
 
@@ -23,7 +23,7 @@ describe ActiveEvent::Spy do
     # Dummy class to watch methods in the spec
     #
     class Foo
-      include ActiveEvent::Spy
+      include ActiveSpy::Spy
       watch_method :bar, :foo
 
       def bar
@@ -34,7 +34,7 @@ describe ActiveEvent::Spy do
       end
     end
 
-    ActiveEvent::SpyList.activate
+    ActiveSpy::SpyList.activate
 
     expect_any_instance_of(FooEvents).to receive(:before_bar).and_call_original
     expect_any_instance_of(FooEvents).to receive(:after_bar).and_call_original

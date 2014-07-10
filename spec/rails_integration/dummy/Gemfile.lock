@@ -1,7 +1,7 @@
 PATH
   remote: ../../../
   specs:
-    active_event (0.0.0)
+    active_spy (1.0.0.rc)
       activesupport (~> 4.1.2)
       hashie
       rest-client (= 1.6.7)
@@ -121,7 +121,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  active_event!
+  active_spy!
   pry
   rails (= 4.1.2)
   rails-pry

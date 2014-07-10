@@ -1,4 +1,4 @@
-class UserEvents < ActiveEvent::Base
+class UserEvents < ActiveSpy::Base
 
   def before_save
     @object.name += ' event'

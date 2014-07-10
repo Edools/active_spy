@@ -1,4 +1,4 @@
-# active_event
+# active_spy
 
 Watch for a method call in any class and run before/after callbacks.
 You can even watch your Rails models for events (like create, update,
@@ -11,10 +11,10 @@ classes that you can use to process the received events too.
 ### Pure Ruby
 
 ```ruby
-require 'active_event'
+require 'active_spy'
 
 class Chair
-  include ActiveEvent::Spy
+  include ActiveSpy::Spy
 
   watch_method :break!
 
@@ -28,7 +28,7 @@ class Chair
   end
 end
 
-class ChairEvents < ActiveEvent::Base
+class ChairEvents < ActiveSpy::Base
 
     def before_break!
       puts 'OMG! You are going to break the chair!'
@@ -39,25 +39,25 @@ class ChairEvents < ActiveEvent::Base
     end
 end
 
-ActiveEvent::SpyList.activate
+ActiveSpy::SpyList.activate
 Chair.new.break!
 ```
 
 ### Rails app
 
-First of all, run the install generator: `rails g active_event:install`.
-This command will generate `config/initializers/active_event.rb` and
-`config/active_event.yml`. You must edit the YAML file to use your own app
+First of all, run the install generator: `rails g active_spy:install`.
+This command will generate `config/initializers/active_spy.rb` and
+`config/active_spy.yml`. You must edit the YAML file to use your own app
 parameters.
 
 Then, create a `ProductEvent` class at  `RAILS_ROOT/app/events`
 
 ```ruby
-class ProductEvents < ActiveEvent::Rails::Base
+class ProductEvents < ActiveSpy::Rails::Base
 end
 ```
 
-Declare ActiveEvent's `model_realm`, `model_actor`, and `watch_model_changes`
+Declare ActiveSpy's `model_realm`, `model_actor`, and `watch_model_changes`
 methods in the model that is being watched:
 
 ```ruby
@@ -74,13 +74,13 @@ class User < ActiveRecord::Base
     self
   end
 
-  # ActiveEvent's payload_for method override
+  # ActiveSpy's payload_for method override
   #
   # def payload_for(method)
   #   { user: attributes }
   # end
 
-  # ActiveEvent's realm method override
+  # ActiveSpy's realm method override
   #
   # def realm
   #   return project_group if project_group.admin == self
@@ -115,20 +115,20 @@ to suit your own needs.
 #### Handling the request received by the event runner
 
 To handle the request received by the event-runner, you will need to mount
-the `ActiveEvent::Engine` in your `routes.rb` file:
+the `ActiveSpy::Engine` in your `routes.rb` file:
 
 ```ruby
 Rails.application.routes.draw do
-  mount ActiveEvent::Engine => 'active_event', as: :active_event
+  mount ActiveSpy::Engine => 'active_spy', as: :active_spy
 end
 ```
 
 Then, you need to create a listener class, inheriting from
-`ActiveEvent::Rails::Listener` and named using the watched model's name
+`ActiveSpy::Rails::Listener` and named using the watched model's name
 plus the `Listener` postfix, like this:
 
 ```ruby
-class UserListener < ActiveEvent::Rails::Listener
+class UserListener < ActiveSpy::Rails::Listener
 end
 ```
 
@@ -137,7 +137,7 @@ with the app own database. If you need a different behavior, you can override
 the `create`, `update` and `delete` methods to match your needs:
 
 ```ruby
-class UserListener < ActiveEvent::Rails::Listener
+class UserListener < ActiveSpy::Rails::Listener
 
   def create(object_type, payload, actor, realm)
   end
@@ -150,7 +150,7 @@ class UserListener < ActiveEvent::Rails::Listener
 end
 ```
 
-## Contributing to active_event
+## Contributing to active_spy
 
 * Check out the latest master to make sure the feature hasn't been implemented
   or the bug hasn't been fixed yet.

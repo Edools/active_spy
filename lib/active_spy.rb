@@ -1,18 +1,18 @@
-require 'active_event/configuration'
-require 'active_event/base'
-require 'active_event/spy/spy'
-require 'active_event/spy/spy_list'
-require 'active_event/rails/base' if defined?(Rails)
-require 'active_event/rails/spy' if defined?(Rails)
-require 'active_event/rails/railtie' if defined?(Rails)
-require 'active_event/rails/engine' if defined?(Rails)
-require 'active_event/rails/engine' if defined?(Rails)
-require 'active_event/rails/hook_list' if defined?(Rails)
-require 'active_event/rails/listener'
+require 'active_spy/configuration'
+require 'active_spy/base'
+require 'active_spy/spy/spy'
+require 'active_spy/spy/spy_list'
+require 'active_spy/rails/base' if defined?(Rails)
+require 'active_spy/rails/spy' if defined?(Rails)
+require 'active_spy/rails/railtie' if defined?(Rails)
+require 'active_spy/rails/engine' if defined?(Rails)
+require 'active_spy/rails/engine' if defined?(Rails)
+require 'active_spy/rails/hook_list' if defined?(Rails)
+require 'active_spy/rails/listener'
 
 # Base module for the gem
 #
-module ActiveEvent
+module ActiveSpy
   if defined?(Rails)
     # @!method self.configure
     # Class method to set the service's name, host and port.
@@ -27,12 +27,12 @@ module ActiveEvent
     # Class method to register the service in an event-runner instance.
     #
     def self.register_service
-      host = ActiveEvent::Configuration.event_host
-      port = ActiveEvent::Configuration.event_port
+      host = ActiveSpy::Configuration.event_host
+      port = ActiveSpy::Configuration.event_port
       @@base_url = "#{host}:#{port}/services"
 
       return if self.service_registered?
-      RestClient.post @@base_url, service: ActiveEvent::Configuration.settings
+      RestClient.post @@base_url, service: ActiveSpy::Configuration.settings
     end
 
     # @!method self.service_registered?
@@ -40,7 +40,7 @@ module ActiveEvent
     # runner instance.
     #
     def self.service_registered?
-      name = ActiveEvent::Configuration.name
+      name = ActiveSpy::Configuration.name
       r = RestClient.get "#{@@base_url}/#{name.downcase.gsub(' ', '-').strip}"
       r.code == 200
     end

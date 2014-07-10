@@ -26,9 +26,8 @@ Gem::Specification.new do |s|
     "README.md",
     "Rakefile",
     "VERSION",
-    "active_spy.gemspec",
-    "app/controllers/active_spy/notifications_controller.rb",
-    "config/initializers/active_spy_configuration_loader.rb",
+    "app/controllers/active_event/notifications_controller.rb",
+    "config/initializers/active_event_configuration_loader.rb",
     "config/routes.rb",
     "lib/active_spy.rb",
     "lib/active_spy/base.rb",
@@ -41,9 +40,9 @@ Gem::Specification.new do |s|
     "lib/active_spy/rails/spy.rb",
     "lib/active_spy/spy/spy.rb",
     "lib/active_spy/spy/spy_list.rb",
-    "lib/rails/generators/active_spy/install/install_generator.rb",
-    "lib/rails/generators/active_spy/install/templates/active_spy.yml",
-    "lib/rails/generators/active_spy/install/templates/initializer.rb"
+    "lib/rails/generators/active_event/install/install_generator.rb",
+    "lib/rails/generators/active_event/install/templates/active_event.yml",
+    "lib/rails/generators/active_event/install/templates/initializer.rb"
   ]
   s.homepage = "http://github.com/edools/active_spy"
   s.licenses = ["MIT"]

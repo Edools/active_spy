@@ -1,8 +1,8 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-describe ActiveEvent::Configuration do
+describe ActiveSpy::Configuration do
 
-  Configuration = ActiveEvent::Configuration
+  Configuration = ActiveSpy::Configuration
 
   it 'should be able to set and return host' do
     Configuration.host '192.168.0.100'
@@ -15,7 +15,7 @@ describe ActiveEvent::Configuration do
   end
 
   it 'should be able to return a hash of attributes' do
-    ActiveEvent.configure do |config|
+    ActiveSpy.configure do |config|
       config.host 'localhost'
       config.port '8888'
     end

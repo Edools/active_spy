@@ -1,4 +1,4 @@
-module ActiveEvent
+module ActiveSpy
   class NotificationsController < ActionController::Base
     def handle
     end

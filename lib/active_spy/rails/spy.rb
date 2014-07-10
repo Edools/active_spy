@@ -1,6 +1,6 @@
 require 'active_support'
 
-module ActiveEvent
+module ActiveSpy
   # Module used to hold Rails specific logic.
   #
   module Rails
@@ -8,13 +8,13 @@ module ActiveEvent
     #
     module Spy
       # Default snippet to extends the class with
-      # {ActiveEvent::Spy::ClassMethods} when {ActiveEvent::Spy} is included in
+      # {ActiveSpy::Spy::ClassMethods} when {ActiveSpy::Spy} is included in
       # it.
       #
       def self.included(base)
         base.extend ClassMethods
       end
-      # Class methods to be defined in classes that includes {ActiveEvent::Spy}
+      # Class methods to be defined in classes that includes {ActiveSpy::Spy}
       #
       module ClassMethods
         # Class method to define the realm of the model.
