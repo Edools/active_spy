@@ -26,6 +26,7 @@ Gem::Specification.new do |s|
     "README.md",
     "Rakefile",
     "VERSION",
+    "active_spy.gemspec",
     "app/controllers/active_event/notifications_controller.rb",
     "config/initializers/active_event_configuration_loader.rb",
     "config/routes.rb",
