@@ -10,7 +10,7 @@ describe Product do
     product.my_realm = 'my realm'
 
 
-    expect(RestClient).to receive(:post).with('http://event-runner.com:443/',
+    expect(RestClient).to receive(:post).with('http://event-runner.com:443/events',
       hash_including(
         event: {
           payload: {
