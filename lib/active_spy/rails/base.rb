@@ -48,7 +48,7 @@ module ActiveSpy
         host = ActiveSpy::Configuration.event_host
         port = ActiveSpy::Configuration.event_port
 
-        RestClient.post "#{host}:#{port}/",
+        RestClient.post "#{host}:#{port}/events",
           event: get_request_params(method)
         remove_is_new_method(@object)
       end
