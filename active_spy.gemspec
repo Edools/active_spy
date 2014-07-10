@@ -41,9 +41,9 @@ Gem::Specification.new do |s|
     "lib/active_spy/rails/spy.rb",
     "lib/active_spy/spy/spy.rb",
     "lib/active_spy/spy/spy_list.rb",
-    "lib/rails/generators/active_event/install/install_generator.rb",
-    "lib/rails/generators/active_event/install/templates/active_spy.yml",
-    "lib/rails/generators/active_event/install/templates/initializer.rb"
+    "lib/rails/generators/active_spy/install/install_generator.rb",
+    "lib/rails/generators/active_spy/install/templates/active_spy.yml",
+    "lib/rails/generators/active_spy/install/templates/initializer.rb"
   ]
   s.homepage = "http://github.com/edools/active_spy"
   s.licenses = ["MIT"]
