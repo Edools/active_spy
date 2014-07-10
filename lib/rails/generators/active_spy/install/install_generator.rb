@@ -20,6 +20,10 @@ module ActiveSpy
           f << content unless f.read.include?(content)
         end
       end
+
+      def mount_engine
+        route "mount ActiveSpy::Engine => 'active_spy', as: :active_spy"
+      end
     end
   end
 end
