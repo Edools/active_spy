@@ -4,7 +4,7 @@ PATH
     active_spy (1.0.0.rc)
       activesupport (~> 4.1.2)
       hashie
-      rest-client (= 1.6.7)
+      rest-client (~> 1.6.7)
 
 GEM
   remote: https://rubygems.org/
