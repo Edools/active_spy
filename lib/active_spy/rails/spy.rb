@@ -19,21 +19,33 @@ module ActiveSpy
       module ClassMethods
         # Class method to define the realm of the model.
         #
-        def model_realm(realm_name = nil, &block)
-          realm = -> { send(realm_name) } if realm_name
-          realm = block if block_given?
-          define_method :realm do
-            realm.call
-          end
+        def model_realm(realm_name = nil)
+          dynamically_define_method_or_call_block(:realm, realm_name)
         end
 
         # Class method to define the actor of the model.
         #
-        def model_actor(actor_name = nil, &block)
-          actor = -> { send(actor_name) } if actor_name
-          actor = block if block_given?
-          define_method :actor do
-            actor.call
+        def model_actor(actor_name = nil)
+          dynamically_define_method_or_call_block(:actor, actor_name)
+        end
+
+        # Defines a method called +method_name+ that will call a method called
+        # +method_value+ if a symbol is provided. If a block is provided
+        # instead, it will be returned.
+        #
+        def dynamically_define_method_or_call_block(abstract_name, method_name)
+          if method_name
+            if abstract_name == method_name
+              attr_accessor method_name
+            else
+              define_method method_name do
+                send(:instance_variable_get, "@#{abstract_name}")
+              end
+
+              define_method "#{method_name}=" do |new_value|
+                send(:instance_variable_set, "@#{abstract_name}", new_value)
+              end
+            end
           end
         end
 

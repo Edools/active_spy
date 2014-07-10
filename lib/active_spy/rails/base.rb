@@ -48,7 +48,7 @@ module ActiveSpy
         host = ActiveSpy::Configuration.event_host
         port = ActiveSpy::Configuration.event_port
 
-        RestClient.post "#{host}:#{port}/",
+        RestClient.post "#{host}:#{port}/events",
           event: get_request_params(method)
         remove_is_new_method(@object)
       end
@@ -60,8 +60,8 @@ module ActiveSpy
         action = get_action(real_method)
         {
           type:     @object.class.name,
-          actor:    @object.actor,
-          realm:    @object.realm,
+          actor:    @object.instance_variable_get('@actor'),
+          realm:    @object.instance_variable_get('@realm'),
           payload:  @object.payload_for(action),
           action:   action
         }

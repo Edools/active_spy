@@ -61,36 +61,29 @@ Declare ActiveSpy's `model_realm`, `model_actor`, and `watch_model_changes`
 methods in the model that is being watched:
 
 ```ruby
-
 class User < ActiveRecord::Base
   belong_to :project
   belongs_to :project_group
 
-  model_realm { :project }
-  model_actor :get_actor
+  model_realm :realm
+  model_actor :my_actor
   watch_model_changes
-
-  def get_actor
-    self
-  end
 
   # ActiveSpy's payload_for method override
   #
   # def payload_for(method)
   #   { user: attributes }
   # end
-
-  # ActiveSpy's realm method override
-  #
-  # def realm
-  #   return project_group if project_group.admin == self
-  #   project
-  # end
 end
 ```
 
-You may override `payload_for(method)`, `realm` and `actor` for more complex
-use cases.
+You may override `payload_for(method)` for more complex use cases. The
+`model_realm :realm` will create a realm attribute accessor for you to use
+wherever you want, usually inside a controller, to set the realm of the user.
+The `model_actor :my_actor` will create an attribute acessdor for the actor,
+but will define it using the `my_actor` and `my_actor=` methods. This allows
+you to avoid your attributes, methods and relations to be overwritten. Both
+realm and actor and necesary to be bent to the event runner.
 
 Now, when you can create, update or delete instances of User, a request will be
 sent to the `event_host` and `event_port` defined in the configuration YAML file.
@@ -99,7 +92,7 @@ The body will be filled with a hash like this, as json:
 ```
 {
   type:     'User',         # object's class name
-  actor:    user.actor,     # object's actor (who made that action)
+  actor:    user.my_actor,     # object's actor (who made that action)
   realm:    user.realm,     # object's realm
   action: action            # the action executed in the object
   payload:  {
