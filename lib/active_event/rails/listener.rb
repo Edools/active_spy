@@ -5,7 +5,7 @@ module ActiveEvent
   module Rails
     # Base class used to process the events received.
     #
-    class EventHandler
+    class Listener
       include ActiveSupport::Inflector
 
 

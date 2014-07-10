@@ -124,11 +124,11 @@ end
 ```
 
 Then, you need to create a listener class, inheriting from
-`ActiveEvent::Rails::EventHandler` and named using the watched model's name
+`ActiveEvent::Rails::Listener` and named using the watched model's name
 plus the `Listener` postfix, like this:
 
 ```ruby
-class UserListener < ActiveEvent::Rails::EventHandler
+class UserListener < ActiveEvent::Rails::Listener
 end
 ```
 
@@ -137,7 +137,7 @@ with the app own database. If you need a different behavior, you can override
 the `create`, `update` and `delete` methods to match your needs:
 
 ```ruby
-class UserListener < ActiveEvent::Rails::EventHandler
+class UserListener < ActiveEvent::Rails::Listener
 
   def create(object_type, payload, actor, realm)
   end

@@ -73,7 +73,7 @@ describe Product do
           'http://event-runner.com:443/services/dummy',
           ).and_return(hooks.to_json)
 
-        class ProductListener < ActiveEvent::Rails::EventHandler
+        class ProductListener < ActiveEvent::Rails::Listener
         end
 
         ActiveEvent::Rails::HookList.register
@@ -118,7 +118,7 @@ describe Product do
           }
         )
 
-        class UserListener < ActiveEvent::Rails::EventHandler
+        class UserListener < ActiveEvent::Rails::Listener
         end
 
         ActiveEvent::Rails::HookList.register

@@ -1,13 +1,13 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-describe ActiveEvent::Rails::EventHandler do
+describe ActiveEvent::Rails::Listener do
 
   class User
   end
 
   context 'database syncing' do
 
-    let(:handler) { ActiveEvent::Rails::EventHandler.new }
+    let(:handler) { ActiveEvent::Rails::Listener.new }
     let!(:params) do
       {
         type: 'User',
