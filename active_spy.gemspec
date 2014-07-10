@@ -42,7 +42,7 @@ Gem::Specification.new do |s|
     "lib/active_spy/spy/spy.rb",
     "lib/active_spy/spy/spy_list.rb",
     "lib/rails/generators/active_event/install/install_generator.rb",
-    "lib/rails/generators/active_event/install/templates/active_event.yml",
+    "lib/rails/generators/active_event/install/templates/active_spy.yml",
     "lib/rails/generators/active_event/install/templates/initializer.rb"
   ]
   s.homepage = "http://github.com/edools/active_spy"
@@ -55,7 +55,7 @@ Gem::Specification.new do |s|
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
       s.add_runtime_dependency(%q<activesupport>, ["~> 4.1.2"])
-      s.add_runtime_dependency(%q<rest-client>, ["= 1.6.7"])
+      s.add_runtime_dependency(%q<rest-client>, ["~> 1.6.7"])
       s.add_runtime_dependency(%q<hashie>, [">= 0"])
       s.add_development_dependency(%q<activerecord>, ["~> 4.1.2"])
       s.add_development_dependency(%q<rails>, ["~> 4.1.2"])
@@ -69,7 +69,7 @@ Gem::Specification.new do |s|
       s.add_development_dependency(%q<simplecov>, [">= 0"])
     else
       s.add_dependency(%q<activesupport>, ["~> 4.1.2"])
-      s.add_dependency(%q<rest-client>, ["= 1.6.7"])
+      s.add_dependency(%q<rest-client>, ["~> 1.6.7"])
       s.add_dependency(%q<hashie>, [">= 0"])
       s.add_dependency(%q<activerecord>, ["~> 4.1.2"])
       s.add_dependency(%q<rails>, ["~> 4.1.2"])
@@ -84,7 +84,7 @@ Gem::Specification.new do |s|
     end
   else
     s.add_dependency(%q<activesupport>, ["~> 4.1.2"])
-    s.add_dependency(%q<rest-client>, ["= 1.6.7"])
+    s.add_dependency(%q<rest-client>, ["~> 1.6.7"])
     s.add_dependency(%q<hashie>, [">= 0"])
     s.add_dependency(%q<activerecord>, ["~> 4.1.2"])
     s.add_dependency(%q<rails>, ["~> 4.1.2"])
