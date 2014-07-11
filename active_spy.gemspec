@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.required_rubygems_version = Gem::Requirement.new("> 1.3.1") if s.respond_to? :required_rubygems_version=
   s.require_paths = ["lib"]
   s.authors = ["Douglas Camata"]
-  s.date = "2014-07-10"
+  s.date = "2014-07-11"
   s.description = "    Watch for a method call in any class and run before/after callbacks.\n    You can even watch your Rails models for events (like create, update,\n    destroy), send these events to a event-runner instance and it redirect these\n    events to other apps that are subscrived for them. This gem also provides\n    classes that you can use to process the received events too.\n"
   s.email = "d.camata@gmail.com"
   s.extra_rdoc_files = [
@@ -27,8 +27,8 @@ Gem::Specification.new do |s|
     "Rakefile",
     "VERSION",
     "active_spy.gemspec",
-    "app/controllers/active_event/notifications_controller.rb",
-    "config/initializers/active_event_configuration_loader.rb",
+    "app/controllers/active_spy/notifications_controller.rb",
+    "config/initializers/active_spy_configuration_loader.rb",
     "config/routes.rb",
     "lib/active_spy.rb",
     "lib/active_spy/base.rb",
@@ -54,11 +54,11 @@ Gem::Specification.new do |s|
     s.specification_version = 4
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
-      s.add_runtime_dependency(%q<activesupport>, ["~> 4.1.2"])
+      s.add_runtime_dependency(%q<activesupport>, ["~> 4.0.0"])
       s.add_runtime_dependency(%q<rest-client>, ["~> 1.6.7"])
       s.add_runtime_dependency(%q<hashie>, [">= 0"])
-      s.add_development_dependency(%q<activerecord>, ["~> 4.1.2"])
-      s.add_development_dependency(%q<rails>, ["~> 4.1.2"])
+      s.add_development_dependency(%q<activerecord>, ["~> 4.0.0"])
+      s.add_development_dependency(%q<rails>, ["~> 4.0.0"])
       s.add_development_dependency(%q<rubocop>, ["~> 0.24.0"])
       s.add_development_dependency(%q<pry>, ["~> 0.10.0"])
       s.add_development_dependency(%q<rspec>, ["~> 3.0.0"])
@@ -68,11 +68,11 @@ Gem::Specification.new do |s|
       s.add_development_dependency(%q<jeweler>, ["~> 2.0.1"])
       s.add_development_dependency(%q<simplecov>, [">= 0"])
     else
-      s.add_dependency(%q<activesupport>, ["~> 4.1.2"])
+      s.add_dependency(%q<activesupport>, ["~> 4.0.0"])
       s.add_dependency(%q<rest-client>, ["~> 1.6.7"])
       s.add_dependency(%q<hashie>, [">= 0"])
-      s.add_dependency(%q<activerecord>, ["~> 4.1.2"])
-      s.add_dependency(%q<rails>, ["~> 4.1.2"])
+      s.add_dependency(%q<activerecord>, ["~> 4.0.0"])
+      s.add_dependency(%q<rails>, ["~> 4.0.0"])
       s.add_dependency(%q<rubocop>, ["~> 0.24.0"])
       s.add_dependency(%q<pry>, ["~> 0.10.0"])
       s.add_dependency(%q<rspec>, ["~> 3.0.0"])
@@ -83,11 +83,11 @@ Gem::Specification.new do |s|
       s.add_dependency(%q<simplecov>, [">= 0"])
     end
   else
-    s.add_dependency(%q<activesupport>, ["~> 4.1.2"])
+    s.add_dependency(%q<activesupport>, ["~> 4.0.0"])
     s.add_dependency(%q<rest-client>, ["~> 1.6.7"])
     s.add_dependency(%q<hashie>, [">= 0"])
-    s.add_dependency(%q<activerecord>, ["~> 4.1.2"])
-    s.add_dependency(%q<rails>, ["~> 4.1.2"])
+    s.add_dependency(%q<activerecord>, ["~> 4.0.0"])
+    s.add_dependency(%q<rails>, ["~> 4.0.0"])
     s.add_dependency(%q<rubocop>, ["~> 0.24.0"])
     s.add_dependency(%q<pry>, ["~> 0.10.0"])
     s.add_dependency(%q<rspec>, ["~> 3.0.0"])
