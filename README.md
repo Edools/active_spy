@@ -46,9 +46,10 @@ Chair.new.break!
 ### Rails app
 
 First of all, run the install generator: `rails g active_spy:install`.
-This command will generate `config/initializers/active_spy.rb` and
-`config/active_spy.yml`. You must edit the YAML file to use your own app
-parameters.
+This command will inject gem's configurations at `config/environment.rb`,
+generate `config/active_spy.yml` file and mount active_spy's engine at
+`config/routes.rb`. You must edit the YAML file to use your own app
+parameters and optionally change the engine route.
 
 Then, create a `ProductEvent` class at  `RAILS_ROOT/app/events`
 
@@ -107,18 +108,9 @@ to suit your own needs.
 
 #### Handling the request received by the event runner
 
-To handle the request received by the event-runner, you will need to mount
-the `ActiveSpy::Engine` in your `routes.rb` file:
-
-```ruby
-Rails.application.routes.draw do
-  mount ActiveSpy::Engine => 'active_spy', as: :active_spy
-end
-```
-
-Then, you need to create a listener class, inheriting from
-`ActiveSpy::Rails::Listener` and named using the watched model's name
-plus the `Listener` postfix, like this:
+To handle the request received by the event-runner, you need to create a
+listener class, inheriting from `ActiveSpy::Rails::Listener` and named using the
+watched model's name plus the `Listener` postfix, like this:
 
 ```ruby
 class UserListener < ActiveSpy::Rails::Listener
