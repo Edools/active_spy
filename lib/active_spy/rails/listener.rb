@@ -29,12 +29,11 @@ module ActiveSpy
       # them.
       #
       def handle(params)
-        object_type = params.delete(:type)
-        callback = params[:payload].delete(:action)
-        payload_content = params.delete(:payload)[object_type.downcase.to_sym]
-        actor = params.delete(:actor)
-        realm = params.delete(:realm)
-
+        object_type = params.delete('type')
+        callback = params.delete('action')
+        payload_content = params.delete('payload')[object_type.downcase]
+        actor = params.delete('actor')
+        realm = params.delete('realm')
         sync_database(callback, object_type, payload_content, actor, realm)
       end
 
@@ -59,7 +58,7 @@ module ActiveSpy
       #
       def update(object_type, payload, _actor, _realm)
         klass = get_object_class(object_type)
-        guid = payload.delete(:guid)
+        guid = payload['guid']
         klass.find_by(guid: guid).update_attributes(payload)
       end
 
@@ -68,7 +67,7 @@ module ActiveSpy
       #
       def destroy(klass, payload, _actor, _realm)
         klass = get_object_class(klass)
-        guid = payload.delete(:guid)
+        guid = payload.delete('guid')
         klass.find_by(guid: guid).destroy!
       end
 
