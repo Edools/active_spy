@@ -52,9 +52,9 @@ module ActiveSpy
       ActiveSupport::Inflector.constantize(klass).class_eval do
 
         old_method = instance_method(method)
-        define_method method do
+        define_method method do |*args, &block|
           send(:invoke_callback, method, :before)
-          result = old_method.bind(self).call
+          result = old_method.bind(self).call(*args, &block)
           send(:invoke_callback, method, :after)
           result
         end

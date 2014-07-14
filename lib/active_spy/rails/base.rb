@@ -10,20 +10,15 @@ module ActiveSpy
     class Base
       def initialize(object)
         @object = object
+        inject_is_new_method(@object)
+        @object.is_new = true if @object.new_record?
       end
 
       # Overriding to avoid sending the object to server 2 times (in both
       # before and after callabcks).
       #
       def respond_to?(method)
-        method.include?('after_') || method == 'before_save'
-      end
-
-      # Set a flag in the object to tell us wether it's a new record or not.
-      #
-      def before_save
-        inject_is_new_method(@object)
-        @object.is_new = true if @object.new_record?
+        method.include?('after_')
       end
 
       # Inject an attribute in the +object+, called +is_new?+ and a setter
