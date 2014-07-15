@@ -59,7 +59,9 @@ module ActiveSpy
       #
       def create(object_type, payload, _actor, _realm)
         klass = get_object_class(object_type)
-        klass.new.update_attributes(payload)
+        object = klass.new
+        object.update_attributes(payload)
+        object
       end
 
       # Logic to handle object's update. You can override this, as you wish,
@@ -68,7 +70,9 @@ module ActiveSpy
       def update(object_type, payload, _actor, _realm)
         klass = get_object_class(object_type)
         guid = payload['guid']
-        klass.find_by(guid: guid).update_attributes(payload)
+        object = klass.find_by(guid: guid)
+        object.update_attributes(payload)
+        object
       end
 
       # Destroy a record from our database. You can override this, as you wish,
@@ -77,7 +81,9 @@ module ActiveSpy
       def destroy(klass, payload, _actor, _realm)
         klass = get_object_class(klass)
         guid = payload.delete('guid')
-        klass.find_by(guid: guid).destroy!
+        object = klass.find_by(guid: guid)
+        object.destroy!
+        object
       end
 
       # Gets the object class. First, it'll look the {MODEL_HANDLER} hash and
