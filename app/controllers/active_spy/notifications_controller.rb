@@ -5,7 +5,7 @@ module ActiveSpy
       current_hook = nil
       hooks.each do |hook|
         if hook['post_class'].downcase == params['class']
-          "#{params['class']}Listener".constantize.new.handle(params['event'])
+          "#{hook['post_class']}Listener".constantize.new.handle(params['event'])
         end
       end
     end
