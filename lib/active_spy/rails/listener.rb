@@ -23,7 +23,7 @@ module ActiveSpy
       #
       def self.inherited(child)
         hook = nil
-        if @@external_class
+        if defined?(@@external_class)
           hook = { 'class' => @@external_class }
         elsif child.name.include? 'Listener'
           hook = { 'class' => child.name.split('Listener')[0]}
