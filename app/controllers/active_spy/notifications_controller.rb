@@ -2,14 +2,15 @@ module ActiveSpy
   class NotificationsController < ActionController::Base
     def handle
       hooks = ActiveSpy::Rails::HookList.hooks
-      current_hook = nil
+      result = nil
       hooks.each do |hook|
         if hook['post_class'].downcase == params['class']
           listener = "#{hook['post_class']}Listener".constantize
           result = listener.new.handle(params['event'])
+          respond_with result and return
         end
       end
-      respond_with result
+      render nothing: true, status: :not_found
     end
   end
 end
