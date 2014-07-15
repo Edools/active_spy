@@ -32,7 +32,7 @@ module ActiveSpy
       @@base_url = "#{host}:#{port}/services"
 
       return if self.service_registered?
-      RestClient.post @@base_url, service: ActiveSpy::Configuration.settings
+      RestClient.post(@@base_url, service: ActiveSpy::Configuration.settings)
     end
 
     # @!method self.service_registered?
@@ -41,8 +41,13 @@ module ActiveSpy
     #
     def self.service_registered?
       name = ActiveSpy::Configuration.name
-      r = RestClient.get "#{@@base_url}/#{name.downcase.gsub(' ', '-').strip}"
-      r.code == 200
+      begin
+        r = RestClient.get "#{@@base_url}/#{name.downcase.gsub(' ', '-').strip}"
+      rescue RestClient::ResourceNotFound
+        return false
+      else
+        return true
+      end
     end
   end
 end

@@ -30,11 +30,8 @@ describe Product do
 
   context 'service registration' do
     it 'should register service when register_service is called' do
-      response = double('response')
-      expect(response).to receive(:code).and_return(404)
-
       expect(RestClient).to receive(:get).
-        with('http://event-runner.com:443/services/dummy').and_return(response)
+        with('http://event-runner.com:443/services/dummy').and_raise RestClient::ResourceNotFound
 
       expect(RestClient).to receive(:post).with('http://event-runner.com:443/services',
         hash_including(
@@ -51,7 +48,6 @@ describe Product do
 
     it 'should not register itself if already registrated' do
       response = double('response')
-      expect(response).to receive(:code).and_return(200)
 
       expect(RestClient).to receive(:get).
         with('http://event-runner.com:443/services/dummy').and_return(response)
@@ -115,9 +111,10 @@ describe Product do
 
         expect(RestClient).to receive(:post).with(
           'http://event-runner.com:443/services/dummy/hooks', {
-            'class' => 'User',
-            'postPath' => '/active_spy/notifications/user',
-            'active' => true
+            'hook' => {
+              'class' => 'User',
+              'post_path' => '/active_spy/notifications/user'
+            }
           }
         )
 
