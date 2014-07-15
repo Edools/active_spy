@@ -10,8 +10,8 @@ module ActiveSpy
         if hook['post_class'].downcase == params['class']
           listener = "#{hook['post_class']}Listener".constantize
           result = listener.new.handle(params['event'])
-          render result.errors.to_json and return if result.errors.present?
-          render result.to_json
+          render json: result.errors and return if result.errors.present?
+          render json: result
         end
       end
       render nothing: true, status: :not_found
