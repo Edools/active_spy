@@ -29,6 +29,10 @@ module ActiveSpy
         @hooks = []
       end
 
+      def hooks
+        @hooks
+      end
+
       # forward {<<} method to the hook list.
       #
       def <<(other)
@@ -39,6 +43,7 @@ module ActiveSpy
       # them already exists, they will be excluded and readded.
       #
       def register
+        @hooks = @hooks.map(&:to_hook)
         old_hooks = get_old_hooks
         hooks_to_delete = get_hooks_to_delete(old_hooks)
         hooks_to_add = get_hooks_to_add(old_hooks)
@@ -49,7 +54,6 @@ module ActiveSpy
       # Get the old hooks list for this service from the event-runner
       #
       def get_old_hooks
-
         JSON.load(RestClient.get(@base_service_url))['hooks']
       end
 
@@ -105,7 +109,7 @@ module ActiveSpy
           RestClient.post "#{@base_service_url}/hooks",
             'hook'=> {
               'class'=> hook['class'],
-              'post_path' => ActiveSpy::Engine.routes.url_helpers.notifications_path(hook['class'].downcase),
+              'post_path' => ActiveSpy::Engine.routes.url_helpers.notifications_path(hook['post_class'].downcase),
             }
         end
       end

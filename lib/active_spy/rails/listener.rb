@@ -14,21 +14,24 @@ module ActiveSpy
       #
       MODEL_HANDLER = {}
 
-      def self.external_class(klass)
-        @@external_class = klass
-      end
-
       # Store the event handler hook in the {ActiveSpy::Rails::HookList} for
       # later registration of them within the event runner.
       #
       def self.inherited(child)
-        hook = nil
-        if defined?(@@external_class)
-          hook = { 'class' => @@external_class }
-        elsif child.name.include? 'Listener'
-          hook = { 'class' => child.name.split('Listener')[0]}
-        end
-        ActiveSpy::Rails::HookList << hook
+        ActiveSpy::Rails::HookList << child
+      end
+
+      def self.external_class(klass)
+        @@external_class = klass
+      end
+
+      def self.to_hook
+        { 'class' => hook_class, 'post_class'=> name.split('Listener')[0] }
+      end
+
+      def self.hook_class
+        return @@external_class if defined? @@external_class
+        name.split('Listener')[0]
       end
 
       # Handle a request with +params+ and sync the database according to
