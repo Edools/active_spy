@@ -29,7 +29,7 @@ module ActiveSpy
 
       # Set the external classes which we are listening to.
       #
-      def self.external_classes(classes)
+      def self.external_classes(*classes)
         @@external_classes = classes
       end
 
