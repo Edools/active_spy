@@ -12,8 +12,7 @@ module ActiveSpy
             render json: result.errors
           else
             render json: result
-          end
-          return
+          end and return
         end
       end
       render nothing: true, status: :not_found
