@@ -1,7 +1,5 @@
 module ActiveSpy
   class NotificationsController < ActionController::Base
-
-
     def handle
       request.format = 'application/json'
       hooks = ActiveSpy::Rails::HookList.hooks

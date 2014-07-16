@@ -21,17 +21,33 @@ module ActiveSpy
         ActiveSpy::Rails::HookList << child
       end
 
+      # Set the external class of the model that we are listening to.
+      #
       def self.external_class(klass)
-        @@external_class = klass
+        @@external_classes = [klass]
       end
 
+      # Set the external classes which we are listening to.
+      #
+      def self.external_classes(classes)
+        @@external_classes = classes
+      end
+
+      # Convert the listener class into one or more hook hashes
+      #
       def self.to_hook
-        { 'class' => hook_class, 'post_class'=> name.split('Listener')[0] }
+        hooks = []
+        hook_classes.each do |hook_class|
+          hooks << { 'class' => hook_class, 'post_class'=> name.split('Listener')[0] }
+        end
+        hooks
       end
 
-      def self.hook_class
-        return @@external_class if defined? @@external_class
-        name.split('Listener')[0]
+      # Get the classes that we are listegnig to.
+      #
+      def self.hook_classes
+        return @@external_classes if defined? @@external_classes
+        [name.split('Listener')[0]]
       end
 
       # Handle a request with +params+ and sync the database according to

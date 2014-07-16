@@ -6,6 +6,10 @@ module ActiveSpy
     class HookList
       include Singleton
 
+      # Simple attribute reader for hooks
+      #
+      attr_reader :hooks
+
       # Initialize an empty hook list
       #
       def initialize
@@ -29,10 +33,6 @@ module ActiveSpy
         @hooks = []
       end
 
-      def hooks
-        @hooks
-      end
-
       # forward {<<} method to the hook list.
       #
       def <<(other)
@@ -43,7 +43,7 @@ module ActiveSpy
       # them already exists, they will be excluded and readded.
       #
       def register
-        @hooks = @hooks.map(&:to_hook)
+        @hooks = @hooks.map(&:to_hook).flatten
         old_hooks = get_old_hooks
         hooks_to_delete = get_hooks_to_delete(old_hooks)
         hooks_to_add = get_hooks_to_add(old_hooks)
