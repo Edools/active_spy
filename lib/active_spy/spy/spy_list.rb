@@ -23,7 +23,7 @@ module ActiveSpy
       instance.send(method, *args, &block)
     end
 
-    # Active all the spies defined in the spy list by patching the methods
+    # Activate all the spies defined in the spy list by patching the methods
     # in their classes.
     #
     def activate
@@ -31,7 +31,18 @@ module ActiveSpy
         spied_class = spy['class']
         spied_method = spy['method']
 
-        patch(spied_class, spied_method)
+        spy['old_method'] = patch(spied_class, spied_method) unless spy['active']
+        spy['active'] = true
+      end
+    end
+
+    # Deactivate all the spies defined in the spy list by unpatching the methods
+    # in their classes.
+    #
+    def deactivate
+      @spies.each do |spy|
+        unpatch(spy['class'], spy['method'], spy['old_method'])
+        spy['active'] = nil
       end
     end
 
@@ -49,6 +60,7 @@ module ActiveSpy
     # {ActiveSpy::Base}.
     #
     def patch(klass, method)
+      old_method = nil
       ActiveSupport::Inflector.constantize(klass).class_eval do
 
         old_method = instance_method(method)
@@ -57,6 +69,18 @@ module ActiveSpy
           result = old_method.bind(self).call(*args, &block)
           send(:invoke_callback, method, :after)
           result
+        end
+      end
+      old_method
+    end
+
+    # Properyly unpatch the +method+ in class +klass+ and put back +old_method+
+    # in its place.
+    #
+    def unpatch(klass, method, old_method)
+      ActiveSupport::Inflector.constantize(klass).class_eval do
+        define_method method do |*args, &block|
+          old_method.bind(self).call(*args, &block)
         end
       end
     end
