@@ -106,11 +106,14 @@ module ActiveSpy
       #
       def add_hooks(hooks_to_add)
         hooks_to_add.each do |hook|
-          RestClient.post "#{@base_service_url}/hooks",
+          hook = {
             'hook'=> {
               'class'=> hook['class'],
               'post_path' => ActiveSpy::Engine.routes.url_helpers.notifications_path(hook['post_class'].downcase),
             }
+          }
+          RestClient.post "#{@base_service_url}/hooks", hook.to_json,
+            content_type: :json
         end
       end
     end

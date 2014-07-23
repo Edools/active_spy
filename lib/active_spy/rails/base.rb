@@ -43,8 +43,9 @@ module ActiveSpy
         host = ActiveSpy::Configuration.event_host
         port = ActiveSpy::Configuration.event_port
 
-        RestClient.post "#{host}:#{port}/events",
-          event: get_request_params(method)
+        event_json = { event: get_request_params(method) }.to_json
+        RestClient.post "#{host}:#{port}/events", event_json,
+          content_type: :json
         remove_is_new_method(@object)
       end
 
