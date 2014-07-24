@@ -33,7 +33,7 @@ module ActiveSpy
 
       return if self.service_registered?
       service = { service: ActiveSpy::Configuration.settings }.to_json
-      RestClient.post(@@base_url, service.to_json, content_type: :json)
+      RestClient.post(@@base_url, service, content_type: :json)
     end
 
     # @!method self.service_registered?

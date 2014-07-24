@@ -11,17 +11,17 @@ describe Product do
 
 
     expect(RestClient).to receive(:post).with('http://event-runner.com:443/events',
-      hash_including(
+      {
         event: {
+          type: 'Product',
+          actor: 'my actor',
+          realm: 'my realm',
           payload: {
             product: product.attributes,
           },
           action: 'create',
-          realm: 'my realm',
-          actor: 'my actor',
-          type: 'Product'
         }
-      )
+      }.to_json, { content_type: :json }
     )
 
     product.save
@@ -34,13 +34,14 @@ describe Product do
         with('http://event-runner.com:443/services/dummy').and_raise RestClient::ResourceNotFound
 
       expect(RestClient).to receive(:post).with('http://event-runner.com:443/services',
-        hash_including(
+        {
           service: {
             name: 'dummy',
             hostname: 'http://dummy.com',
             port: '80'
           }
-        )
+        }.to_json,
+        content_type: :json
       )
 
       ActiveSpy.register_service
@@ -115,7 +116,8 @@ describe Product do
               'class' => 'User',
               'post_path' => '/active_spy/notifications/user'
             }
-          }
+          }.to_json,
+          content_type: :json
         )
 
         class UserListener < ActiveSpy::Rails::Listener
