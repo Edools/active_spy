@@ -69,6 +69,7 @@ module ActiveSpy
         object.instance_eval do
           undef :is_new=
           undef :is_new?
+          instance_variable_set(:@is_new, nil)
         end
       end
 
