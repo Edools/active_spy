@@ -43,14 +43,23 @@ module ActiveSpy
         @event_host
       end
 
-      # Set if the gem is in development mode or not
+      # Set if the gem is in development mode or not.
       #
       # @param [Boolean] development moded state to set
       #
       # @return [Boolean] development moded state to set
-      def development_mode(mode = nil)
-        @development_mode = mode unless mode.nil?
+      def development_mode(mode = nil, options = nil)
+        unless mode.nil?
+          @development_mode = mode
+          @skip_validations = options[:skip_validations] if options.present?
+        end
         @development_mode
+      end
+
+      # Simple reader for +skip_validations+ attribute.
+      #
+      def skip_validations
+        @skip_validations
       end
 
       # Imperative method to set development mode.

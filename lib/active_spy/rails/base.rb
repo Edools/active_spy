@@ -42,7 +42,7 @@ module ActiveSpy
       #
       def method_missing(method, *_args, &_block)
         event_json = { event: get_request_params(method) }.to_json
-        ActiveSpy::Rails::Validation::Event.new(event_json).validate!
+        ActiveSpy::Rails::Validation::Event.new(event_json).validate! unless ActiveSpy::Configuration.skip_validations
         send_event_request(event_json) unless ActiveSpy::Configuration.development_mode
         remove_is_new_method(@object)
       end

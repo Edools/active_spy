@@ -54,6 +54,24 @@ describe Product do
     product.save
   end
 
+  it 'should be able to skip events validations if the options provided to development mode' do
+    ActiveSpy::Configuration.development_mode true, skip_validations: true
+
+    right_now = Time.now
+    product = Product.new name: 'Foo', id: 1, guid: '123', created_at: right_now,
+      updated_at: right_now
+    product.actor = 'my actor'
+    product.my_realm = 'my realm'
+
+    allow(RestClient).to receive(:post)
+
+    expect_any_instance_of(ActiveSpy::Rails::Validation::Event).
+      not_to receive(:validate!)
+
+    product.save
+    ActiveSpy::Configuration.development_mode false, skip_validations: false
+  end
+
   context 'service registration' do
     it 'should register service when register_service is called' do
       expect(RestClient).to receive(:get).

@@ -24,6 +24,11 @@ describe ActiveSpy::Configuration do
       Configuration.development_mode true
       expect(Configuration.development_mode).to be_truthy
     end
+
+    it 'should be able to set skip validation flag' do
+      Configuration.development_mode true, skip_validations: true
+      expect(Configuration.skip_validations).to be_truthy
+    end
   end
 
   it 'should be able to return a hash of attributes' do
