@@ -28,6 +28,32 @@ describe Product do
     expect(product.my_realm).to eql('my realm')
   end
 
+  it 'should use the events validator to validate the actor and realm hash' do
+    right_now = Time.now
+    product = Product.new name: 'Foo', id: 1, guid: '123', created_at: right_now,
+      updated_at: right_now
+    product.actor = {
+      'id' => '1',
+      'class' => 'User',
+      'login' => 'user1@gmail.com',
+      'url' => 'http://user.com',
+      'avatar_url' => 'http://avatar_url.com'
+    }
+    product.my_realm = {
+      'id' => '1',
+      'class' => 'Organization',
+      'name' => 'my organization',
+      'url' => 'http://organization.com',
+    }
+
+    allow(RestClient).to receive(:post)
+
+    expect_any_instance_of(ActiveSpy::Rails::Validation::Event).
+      to receive(:validate!)
+
+    product.save
+  end
+
   context 'service registration' do
     it 'should register service when register_service is called' do
       expect(RestClient).to receive(:get).

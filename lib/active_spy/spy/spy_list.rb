@@ -62,7 +62,6 @@ module ActiveSpy
     def patch(klass, method)
       old_method = nil
       ActiveSupport::Inflector.constantize(klass).class_eval do
-
         old_method = instance_method(method)
         define_method method do |*args, &block|
           send(:invoke_callback, method, :before)

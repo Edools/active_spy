@@ -20,4 +20,9 @@ RSpec.configure do |config|
   # the seed, which is printed after each run.
   #     --seed 1234
   config.order = "random"
+
+  config.before :each do
+    allow_any_instance_of(ActiveSpy::Rails::Validation::Event).
+      to receive(:validate!)
+  end
 end

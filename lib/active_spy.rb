@@ -2,13 +2,17 @@ require 'active_spy/configuration'
 require 'active_spy/base'
 require 'active_spy/spy/spy'
 require 'active_spy/spy/spy_list'
-require 'active_spy/rails/base' if defined?(Rails)
-require 'active_spy/rails/spy' if defined?(Rails)
-require 'active_spy/rails/railtie' if defined?(Rails)
-require 'active_spy/rails/engine' if defined?(Rails)
-require 'active_spy/rails/engine' if defined?(Rails)
-require 'active_spy/rails/hook_list' if defined?(Rails)
-require 'active_spy/rails/listener'
+
+if defined?(Rails)
+  require 'active_spy/rails/base'
+  require 'active_spy/rails/spy'
+  require 'active_spy/rails/railtie'
+  require 'active_spy/rails/engine'
+  require 'active_spy/rails/engine'
+  require 'active_spy/rails/hook_list'
+  require 'active_spy/rails/listener'
+  require 'active_spy/rails/validation'
+end
 
 # Base module for the gem
 #

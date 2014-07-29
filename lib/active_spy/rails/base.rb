@@ -1,5 +1,6 @@
 require 'rest-client'
 require 'singleton'
+require 'json'
 
 module ActiveSpy
   # Module to hold Rails specific classes and helpers.
@@ -40,13 +41,19 @@ module ActiveSpy
       # after callback is not explicitly defined.
       #
       def method_missing(method, *_args, &_block)
+        event_json = { event: get_request_params(method) }.to_json
+        ActiveSpy::Rails::Validation::Event.new(event_json).validate!
+        send_event_request(event_json) if !ActiveSpy::Configuration.development_mode
+        remove_is_new_method(@object)
+      end
+
+      # Sends the event request to the configured event-runner instance.
+      #
+      def send_event_request(event_json)
         host = ActiveSpy::Configuration.event_host
         port = ActiveSpy::Configuration.event_port
-
-        event_json = { event: get_request_params(method) }.to_json
         RestClient.post "#{host}:#{port}/events", event_json,
           content_type: :json
-        remove_is_new_method(@object)
       end
 
       # Get the event request params for a given +method+.
