@@ -1,4 +1,7 @@
 module ActiveSpy
+  # Controller to handle notifications request coming from an event-runner
+  # instance.
+  #
   class NotificationsController < ActionController::Base
     def handle
       request.format = 'application/json'
