@@ -24,13 +24,13 @@ module ActiveSpy
       # Set the external class of the model that we are listening to.
       #
       def self.external_class(klass)
-        @@external_classes = [klass]
+        @external_classes = [klass]
       end
 
       # Set the external classes which we are listening to.
       #
       def self.external_classes(*classes)
-        @@external_classes = classes
+        @external_classes = classes
       end
 
       # Convert the listener class into one or more hook hashes
@@ -38,7 +38,7 @@ module ActiveSpy
       def self.to_hook
         hooks = []
         hook_classes.each do |hook_class|
-          hooks << { 'class' => hook_class, 'post_class'=> name.split('Listener')[0] }
+          hooks << { 'class' => hook_class, 'post_class' => name.split('Listener')[0] }
         end
         hooks
       end
@@ -46,7 +46,7 @@ module ActiveSpy
       # Get the classes that we are listegnig to.
       #
       def self.hook_classes
-        return @@external_classes if defined? @@external_classes
+        return @external_classes if defined? @external_classes
         [name.split('Listener')[0]]
       end
 

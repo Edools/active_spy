@@ -44,23 +44,23 @@ describe ActiveSpy::Rails::Validation::Event do
 
   it 'should raise exception when the realm is missing any attribute' do
     event = {
-        'actor' => {
-          'id' => '1',
-          'class' => 'User',
-          'login' => 'user1@gmail.com',
-          'url' => 'http://user.com',
-          'avatar_url' => 'http://avatar_url.com'
-        },
-        'realm' => {
-          # 'id' => '1',
-          'class' => 'Organization',
-          'name' => 'my organization',
-          'url' => 'http://organization.com',
-        }
-      }.to_json
+      'actor' => {
+        'id' => '1',
+        'class' => 'User',
+        'login' => 'user1@gmail.com',
+        'url' => 'http://user.com',
+        'avatar_url' => 'http://avatar_url.com'
+      },
+      'realm' => {
+        # 'id' => '1',
+        'class' => 'Organization',
+        'name' => 'my organization',
+        'url' => 'http://organization.com',
+      }
+    }.to_json
 
-      validator = ActiveSpy::Rails::Validation::Event.new(event)
-      expect { validator.validate! }.to raise_error ActiveSpy::Rails::Validation::InvalidRealm
+    validator = ActiveSpy::Rails::Validation::Event.new(event)
+    expect { validator.validate! }.to raise_error ActiveSpy::Rails::Validation::InvalidRealm
   end
 
 end

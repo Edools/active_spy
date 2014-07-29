@@ -20,16 +20,17 @@ module ActiveSpy
         end
 
         private
+
         def check_actor_key(actor)
-          raise ActorNotPresent if actor.nil?
+          fail ActorNotPresent if actor.nil?
           errors = get_errors_from_hash(actor, :actor)
-          raise InvalidActor, errors unless errors.empty?
+          fail InvalidActor, errors unless errors.empty?
         end
 
         def check_realm_key(realm)
-          raise RealmNotPresent if realm.nil?
+          fail RealmNotPresent if realm.nil?
           errors = get_errors_from_hash(realm, :realm)
-          raise InvalidRealm, errors unless errors.empty?
+          fail InvalidRealm, errors unless errors.empty?
         end
 
         def get_errors_from_hash(data, hash_type)
@@ -40,11 +41,11 @@ module ActiveSpy
         end
 
         def required_actor_keys
-          ['id', 'class', 'login', 'url', 'avatar_url']
+          %w[id class login url avatar_url]
         end
 
         def required_realm_keys
-          ['id', 'class', 'name', 'url']
+          %w[id class name url]
         end
       end
 

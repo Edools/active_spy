@@ -107,8 +107,8 @@ module ActiveSpy
       def add_hooks(hooks_to_add)
         hooks_to_add.each do |hook|
           hook = {
-            'hook'=> {
-              'class'=> hook['class'],
+            'hook' => {
+              'class' => hook['class'],
               'post_path' => ActiveSpy::Engine.routes.url_helpers.notifications_path(hook['post_class'].downcase),
             }
           }

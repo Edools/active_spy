@@ -12,7 +12,7 @@ module ActiveSpy
       # The source for templates
       #
       def self.source_root
-        @@_active_spy_source_root ||= File.expand_path("../templates", __FILE__)
+        @@_active_spy_source_root ||= File.expand_path('../templates', __FILE__)
       end
 
       # Creates a config file based in the +active_spy.yml+ file.
@@ -26,7 +26,7 @@ module ActiveSpy
       def inject_config_into_environment
         content = File.read(File.join(@@_active_spy_source_root, 'initializer.rb'))
 
-        File.open("config/environment.rb", "a+") do |f|
+        File.open('config/environment.rb', 'a+') do |f|
           f << content unless f.read.include?(content)
         end
       end

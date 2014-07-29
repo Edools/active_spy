@@ -34,17 +34,15 @@ module ActiveSpy
         # instead, it will be returned.
         #
         def dynamically_define_method_or_call_block(abstract_name, method_name)
-          if method_name
-            if abstract_name == method_name
-              attr_accessor method_name
-            else
-              define_method method_name do
-                send(:instance_variable_get, "@#{abstract_name}")
-              end
-
-              define_method "#{method_name}=" do |new_value|
-                send(:instance_variable_set, "@#{abstract_name}", new_value)
-              end
+          return unless method_name
+          if abstract_name == method_name
+            attr_accessor method_name
+          else
+            define_method method_name do
+              send(:instance_variable_get, "@#{abstract_name}")
+            end
+            define_method "#{method_name}=" do |new_value|
+              send(:instance_variable_set, "@#{abstract_name}", new_value)
             end
           end
         end

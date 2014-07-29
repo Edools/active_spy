@@ -5,4 +5,3 @@ if Rails.env.production?
   ActiveSpy.register_service
   ActiveSpy::Rails::HookList.register
 end
-
