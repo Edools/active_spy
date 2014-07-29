@@ -6,7 +6,7 @@ describe ActiveSpy::Rails::Validation::Event do
     it 'should raise exception when the actor is not present' do
       event = {}.to_json
       validator = ActiveSpy::Rails::Validation::Event.new(event)
-      expect { validator.validate!(event) }.to raise_error ActiveSpy::Rails::Validation::ActorNotPresent
+      expect { validator.validate! }.to raise_error ActiveSpy::Rails::Validation::ActorNotPresent
     end
 
     it 'should raise exception when the actor is missing any attribute' do
@@ -21,7 +21,7 @@ describe ActiveSpy::Rails::Validation::Event do
       }.to_json
 
       validator = ActiveSpy::Rails::Validation::Event.new(event)
-      expect { validator.validate!(event) }.to raise_error ActiveSpy::Rails::Validation::InvalidActor
+      expect { validator.validate! }.to raise_error ActiveSpy::Rails::Validation::InvalidActor
     end
   end
 
@@ -38,7 +38,7 @@ describe ActiveSpy::Rails::Validation::Event do
       }.to_json
 
       validator = ActiveSpy::Rails::Validation::Event.new(event)
-      expect { validator.validate!(event) }.to raise_error ActiveSpy::Rails::Validation::RealmNotPresent
+      expect { validator.validate! }.to raise_error ActiveSpy::Rails::Validation::RealmNotPresent
     end
   end
 
@@ -60,7 +60,7 @@ describe ActiveSpy::Rails::Validation::Event do
       }.to_json
 
       validator = ActiveSpy::Rails::Validation::Event.new(event)
-      expect { validator.validate!(event) }.to raise_error ActiveSpy::Rails::Validation::InvalidRealm
+      expect { validator.validate! }.to raise_error ActiveSpy::Rails::Validation::InvalidRealm
   end
 
 end
