@@ -14,6 +14,18 @@ describe ActiveSpy::Configuration do
     expect(Configuration.port).to eql('8888')
   end
 
+  context 'development mode' do
+    it 'should be able to set via imperative method' do
+      Configuration.development_mode!
+      expect(Configuration.development_mode).to be_truthy
+    end
+
+    it 'should be able to set via normala attribution' do
+      Configuration.development_mode true
+      expect(Configuration.development_mode).to be_truthy
+    end
+  end
+
   it 'should be able to return a hash of attributes' do
     ActiveSpy.configure do |config|
       config.host 'localhost'

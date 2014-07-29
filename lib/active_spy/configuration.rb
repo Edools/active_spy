@@ -43,6 +43,22 @@ module ActiveSpy
         @event_host
       end
 
+      # Set if the gem is in development mode or not
+      #
+      # @param [Boolean] development moded state to set
+      #
+      # @return [Boolean] development moded state to set
+      def development_mode(mode = nil)
+        @development_mode = mode unless mode.nil?
+        @development_mode
+      end
+
+      # Imperative method to set development mode.
+      #
+      def development_mode!
+        @development_mode = true
+      end
+
       # Set the default event-runner port
       #
       # @param [String] port to set
