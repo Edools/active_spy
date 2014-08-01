@@ -18,8 +18,8 @@ module ActiveSpy
         #
         # (see #initialize)
         def validate!
-          check_actor_key(@event['actor'])
-          check_realm_key(@event['realm'])
+          check_actor_key(@event['event']['actor'])
+          check_realm_key(@event['event']['realm'])
         end
 
         private
