@@ -9,7 +9,7 @@ module ActiveSpy
       result = nil
       hooks.each do |hook|
         if hook['post_class'].downcase == params['class']
-           handle_result and return
+           handle_result(hook, params) and return
         end
       end
       render nothing: true, status: :not_found
