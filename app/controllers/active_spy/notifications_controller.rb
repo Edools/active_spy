@@ -16,7 +16,6 @@ module ActiveSpy
     end
   end
 
-  private
   def handle_result(hook, params)
     result = get_result(hook, params)
     if result.is_a? Array
