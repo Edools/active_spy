@@ -12,6 +12,7 @@ module ActiveSpy
           listener = "#{hook['post_class']}Listener".constantize
           result = listener.new.handle(params['event'])
           if result.errors.present?
+            Rails.logger.warn("[EVENT][#{hook['post_class']}] Error on save #{result}: #{result.errors}")
             render json: result.errors
           else
             render json: result
