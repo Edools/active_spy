@@ -25,6 +25,7 @@ describe ActiveSpy::Spy do
     watch_method :bar, :foo
 
     def bar
+      'truthy'
     end
 
     def foo
