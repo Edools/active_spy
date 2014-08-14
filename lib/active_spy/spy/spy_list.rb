@@ -66,7 +66,11 @@ module ActiveSpy
         define_method method do |*args, &block|
           send(:invoke_callback, method, :before)
           result = old_method.bind(self).call(*args, &block)
-          send(:invoke_callback, method, :after)
+          if defined?(Rails)
+            send(:invoke_callback, method, :after) if result
+          else
+            send(:invoke_callback, method, :after)
+          end
           result
         end
       end
