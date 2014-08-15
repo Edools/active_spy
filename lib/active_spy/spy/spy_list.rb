@@ -16,7 +16,7 @@ module ActiveSpy
 
     attr_reader :spies
 
-    # Proxy all methods called in the {ActiveSpy::SpyList} to
+    # Proxy all methods called in the {ActiveSpy::SpyList} class to a
     # {ActiveSpy::SpyList} instance. Just a syntax sugar.
     #
     def self.method_missing(method, *args, &block)

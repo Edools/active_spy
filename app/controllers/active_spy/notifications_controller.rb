@@ -19,9 +19,9 @@ module ActiveSpy
       result = get_result(hook, params)
       ::Rails.logger.warn("[EVENT][#{hook['post_class']}] Listener result: #{result}")
       if result.is_a? Array
-        handle_array_result(result, params)
+        handle_array_result(hook, result, params)
       else
-        handle_model_result(result, params)
+        handle_model_result(hook, result, params)
       end
     end
 
@@ -31,7 +31,7 @@ module ActiveSpy
       result = listener.new.handle(params['event'])
     end
 
-    def handle_model_result(result, params)
+    def handle_model_result(hook, result, params)
       if result.errors.present?
         ::Rails.logger.warn("[EVENT][#{hook['post_class']}] Error receiving event #{params}")
         ::Rails.logger.warn("[EVENT][#{hook['post_class']}] Result errors: #{result.errors}")
@@ -41,7 +41,7 @@ module ActiveSpy
       end
     end
 
-    def handle_array_result(result, params)
+    def handle_array_result(hook, result, params)
       model_with_errors = result.select { |m| m.errors.present? }
       if model_with_errors.any?
         ::Rails.logger.warn("[EVENT][#{hook['post_class']}] Error receiving event #{params}")
