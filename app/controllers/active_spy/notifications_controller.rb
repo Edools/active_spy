@@ -20,8 +20,10 @@ module ActiveSpy
       ::Rails.logger.warn("[EVENT][#{hook['post_class']}] Listener result: #{result}")
       if result.is_a? Array
         handle_array_result(hook, result, params)
-      else
+      elsif result.is_a? ActiveRecord::Base
         handle_model_result(hook, result, params)
+      else
+        render nothing: true
       end
     end
 
