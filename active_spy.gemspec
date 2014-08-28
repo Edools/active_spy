@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.require_paths = ["lib"]
   s.authors = ["Douglas Camata"]
-  s.date = "2014-08-15"
+  s.date = "2014-08-28"
   s.description = "    Watch for a method call in any class and run before/after callbacks.\n    You can even watch your Rails models for events (like create, update,\n    destroy), send these events to a event-runner instance and it redirect these\n    events to other apps that are subscrived for them. This gem also provides\n    classes that you can use to process the received events too.\n"
   s.email = "d.camata@gmail.com"
   s.extra_rdoc_files = [
