@@ -37,7 +37,7 @@ module ActiveSpy
       if result.errors.present?
         ::Rails.logger.warn("[EVENT][#{hook['post_class']}] Error receiving event #{params}")
         ::Rails.logger.warn("[EVENT][#{hook['post_class']}] Result errors: #{result.errors}")
-        render json: result.errors
+        render json: result.errors, status: :unprocessable_entity
       else
         render nothing: true
       end
