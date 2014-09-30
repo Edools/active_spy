@@ -102,7 +102,7 @@ module ActiveSpy
         end
       end
 
-      # # Properly creates the +hooks_to_add+ in the event runner..
+      # # Properly creates the +hooks_to_add+ in the event runner.
       #
       def add_hooks(hooks_to_add)
         hooks_to_add.each do |hook|

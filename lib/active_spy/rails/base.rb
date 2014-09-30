@@ -66,8 +66,13 @@ module ActiveSpy
       def send_event_request
         host = ActiveSpy::Configuration.event_host
         port = ActiveSpy::Configuration.event_port
-        RestClient.post "#{host}:#{port}/events", @event_json,
+        response = RestClient.post "#{host}:#{port}/events", @event_json,
           content_type: :json
+        if defined?(Rails)
+          ::Rails.logger.info('[SPY] Event sent to event-runner.')
+          ::Rails.logger.info("[SPY] Event-runner response code: #{response.code}")
+          ::Rails.logger.info("[SPY] Event-runner response: #{response.body}")
+        end
       end
 
       # Get the event request params for a given +method+.

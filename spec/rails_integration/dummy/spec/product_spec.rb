@@ -9,6 +9,9 @@ describe Product do
     product.actor = 'my actor'
     product.my_realm = 'my realm'
 
+    response = double('response')
+    allow(response).to receive(:code) { 200 }
+    allow(response).to receive(:body) { 'success' }
 
     expect(RestClient).to receive(:post).with('http://event-runner.com:443/events',
       {
@@ -22,7 +25,7 @@ describe Product do
           action: 'create',
         }
       }.to_json, { content_type: :json }
-    )
+    ).and_return(response)
 
     product.save
     expect(product.my_realm).to eql('my realm')
@@ -46,7 +49,11 @@ describe Product do
       'url' => 'http://organization.com',
     }
 
-    allow(RestClient).to receive(:post)
+    response = double('response')
+    allow(response).to receive(:code) { 200 }
+    allow(response).to receive(:body) { 'success' }
+
+    allow(RestClient).to receive(:post).and_return(response)
 
     expect_any_instance_of(ActiveSpy::Rails::Validation::Event).
       to receive(:validate!)

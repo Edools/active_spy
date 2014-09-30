@@ -27,7 +27,6 @@ module ActiveSpy
       end
     end
 
-
     def get_result(hook, params)
       listener = "#{hook['post_class']}Listener".constantize
       result = listener.new.handle(params['event'])
@@ -50,6 +49,7 @@ module ActiveSpy
         model_with_errors.each do |model|
           ::Rails.logger.warn("[EVENT][#{hook['post_class']}] #{model} errors: #{model.errors}")
         end
+        render nothing: true, status: :internal_server_error
       else
         render nothing: true
       end
