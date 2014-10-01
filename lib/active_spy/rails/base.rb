@@ -66,6 +66,10 @@ module ActiveSpy
       def send_event_request
         host = ActiveSpy::Configuration.event_host
         port = ActiveSpy::Configuration.event_port
+        ::Rails.logger.info("[SPY] #{@even_json}")
+        ::Rails.logger.info("[SPY] #{@object.inspect}")
+        ::Rails.logger.info("[SPY] #{@object.instance_variable_get('@actor')}")
+        ::Rails.logger.info("[SPY] #{@object.instance_variable_get('@realm')}")
         begin
           response = RestClient.post "#{host}:#{port}/events", @event_json,
             content_type: :json
