@@ -37,31 +37,45 @@ module ActiveSpy
         end
       end
 
-      # Overriding to always send the object to the server, even though the
-      # after callback is not explicitly defined.
+      # Handles the generic +save+. Determines which rail action was done,
+      # +create+ or +update+ and call the right callback.
       #
-      def method_missing(method, *_args, &_block)
-        request_params = get_request_params(method)
-        ::Rails.logger.info("[SPY] Real method: #{method}")
-        ::Rails.logger.info("[SPY] Request params: #{request_params}")
-        @event_json = { event: request_params }.to_json
-        ::Rails.logger.info("[SPY] Event json built: #{@event_json}")
-        ActiveSpy::Rails::Validation::Event.new(@event_json).validate! unless ActiveSpy::Configuration.skip_validations
-        after_callback = "after_#{request_params[:action]}"
-        send(after_callback) if respond_to? after_callback
-        remove_is_new_method(@object)
+      def after_save
+        action = get_action('save')
+        send("after_#{action}")
       end
 
+      # Handles a +create+ callback, prepare and send the request to the event-runner.
+      #
       def after_create
+        request_params = get_request_params('create')
+        prepare_request(request_params)
         send_event_request unless ActiveSpy::Configuration.development_mode
       end
 
+      # Handles an +update+ callback, prepare and send the request to the event-runner.
+      #
       def after_update
+        request_params = get_request_params('update')
+        prepare_request(request_params)
         send_event_request unless ActiveSpy::Configuration.development_mode
       end
 
+      # Handles an +destroy+ callback, prepare and send the request to the event-runner.
+      #
       def after_destroy
+        request_params = get_request_params('destroy')
+        prepare_request(request_params)
         send_event_request unless ActiveSpy::Configuration.development_mode
+      end
+
+      # Prepare a request with +request_params+, validates the request and
+      # remove the injected +is_mew_method+, because it's not needed anymore.
+      #
+      def prepare_request(request_params)
+        @event_json = { event: request_params }.to_json
+        ActiveSpy::Rails::Validation::Event.new(@event_json).validate! unless ActiveSpy::Configuration.skip_validations
+        remove_is_new_method(@object)
       end
 
       # Sends the event request to the configured event-runner instance.
@@ -69,29 +83,20 @@ module ActiveSpy
       def send_event_request
         host = ActiveSpy::Configuration.event_host
         port = ActiveSpy::Configuration.event_port
-        ::Rails.logger.info("[SPY] Event JSON in request send: #{@event_json}")
-        ::Rails.logger.info("[SPY] Object: #{@object.inspect}")
-        ::Rails.logger.info("[SPY] Actor: #{@object.instance_variable_get('@actor')}")
-        ::Rails.logger.info("[SPY] Realm: #{@object.instance_variable_get('@realm')}")
         begin
           response = RestClient.post "#{host}:#{port}/events", @event_json,
             content_type: :json
         rescue => e
-          ::Rails.logger.info(e.response)
         end
         if defined?(Rails) && !ActiveSpy::Configuration.development_mode
-          ::Rails.logger.info('[SPY] Event sent to event-runner.')
-          ::Rails.logger.info("[SPY] Event-runner response code: #{response.code}")
-          ::Rails.logger.info("[SPY] Event-runner response: #{response.body}")
         end
       end
 
       # Get the event request params for a given +method+.
       #
-      def get_request_params(method)
-        real_method = method.to_s.split('_').last
-        ::Rails.logger.info("[SPY] Method and realm method: #{method} - #{real_method}")
-        action = get_action(real_method)
+      def get_request_params(action)
+        # real_method = method.to_s.split('_').last
+        # action = get_action(real_method)
         {
           type:     @object.class.name,
           actor:    @object.instance_variable_get('@actor'),
