@@ -87,8 +87,12 @@ module ActiveSpy
           response = RestClient.post "#{host}:#{port}/events", @event_json,
             content_type: :json
         rescue => e
+          ::Rails.logger.info(e.response)
         end
         if defined?(Rails) && !ActiveSpy::Configuration.development_mode
+          ::Rails.logger.info('[SPY] Event sent to event-runner.')
+          ::Rails.logger.info("[SPY] Event-runner response code: #{response.code}")
+          ::Rails.logger.info("[SPY] Event-runner response: #{response.body}")
         end
       end
 
