@@ -27,6 +27,14 @@ module ActiveSpy
       end
     end
 
+    def is_a_model?(something)
+      if defined?(ActiveRecord)
+        something.is_a? ActiveRecord::Base
+      elsif defined?(Mongoid)
+        something.class.included_modules.include? Mongoid::Document
+      end
+    end
+
     def get_result(hook, params)
       listener = "#{hook['post_class']}Listener".constantize
       result = listener.new.handle(params['event'])
