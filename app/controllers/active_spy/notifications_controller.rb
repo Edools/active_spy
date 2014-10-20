@@ -1,3 +1,6 @@
+class UnsupportedORM < RuntimeError
+end
+
 module ActiveSpy
   # Controller to handle notifications request coming from an event-runner
   # instance.
@@ -20,7 +23,7 @@ module ActiveSpy
       ::Rails.logger.warn("[EVENT][#{hook['post_class']}] Listener result: #{result}")
       if result.is_a? Array
         handle_array_result(hook, result, params)
-      elsif result.is_a? ActiveRecord::Base
+      elsif is_a_model?(result)
         handle_model_result(hook, result, params)
       else
         render nothing: true
@@ -32,6 +35,8 @@ module ActiveSpy
         something.is_a? ActiveRecord::Base
       elsif defined?(Mongoid)
         something.class.included_modules.include? Mongoid::Document
+      else
+        raise UnsupportedORM
       end
     end
 
