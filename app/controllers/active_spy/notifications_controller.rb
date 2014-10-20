@@ -35,7 +35,7 @@ module ActiveSpy
     def handle_model_result(hook, result, params)
       if result.errors.present?
         ::Rails.logger.warn("[EVENT][#{hook['post_class']}] Error receiving event #{params}")
-        ::Rails.logger.warn("[EVENT][#{hook['post_class']}] Result errors: #{result.errors}")
+        ::Rails.logger.warn("[EVENT][#{hook['post_class']}] Result errors: #{result.errors.full_messages}")
         render json: result.errors, status: :unprocessable_entity
       else
         render nothing: true
@@ -47,7 +47,7 @@ module ActiveSpy
       if model_with_errors.any?
         ::Rails.logger.warn("[EVENT][#{hook['post_class']}] Error receiving event #{params}")
         model_with_errors.each do |model|
-          ::Rails.logger.warn("[EVENT][#{hook['post_class']}] #{model} errors: #{model.errors}")
+          ::Rails.logger.warn("[EVENT][#{hook['post_class']}] #{model} errors: #{model.errors.full_messages}")
         end
         render nothing: true, status: :internal_server_error
       else
