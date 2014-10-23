@@ -81,6 +81,7 @@ module ActiveSpy
       # Sends the event request to the configured event-runner instance.
       #
       def send_event_request
+        response = nil
         host = ActiveSpy::Configuration.event_host
         port = ActiveSpy::Configuration.event_port
         begin
