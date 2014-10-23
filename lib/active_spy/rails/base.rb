@@ -90,7 +90,7 @@ module ActiveSpy
         rescue => e
           ::Rails.logger.info(e.response)
         end
-        if defined?(Rails) && !ActiveSpy::Configuration.development_mode
+        if response && defined?(Rails) && !ActiveSpy::Configuration.development_mode
           ::Rails.logger.info('[SPY] Event sent to event-runner.')
           ::Rails.logger.info("[SPY] Event-runner response code: #{response.code}")
           ::Rails.logger.info("[SPY] Event-runner response: #{response.body}")
