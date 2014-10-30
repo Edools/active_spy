@@ -19,6 +19,7 @@ module ActiveSpy
     end
 
     def handle_result(hook, params)
+      ::Rails.logger.warn("[EVENT][#{hook['post_class']}] Event with result: #{params}")
       result = get_result(hook, params)
       ::Rails.logger.warn("[EVENT][#{hook['post_class']}] Listener result: #{result}")
       if result.is_a? Array
@@ -47,7 +48,6 @@ module ActiveSpy
 
     def handle_model_result(hook, result, params)
       if result.errors.present?
-        ::Rails.logger.warn("[EVENT][#{hook['post_class']}] Error receiving event #{params}")
         ::Rails.logger.warn("[EVENT][#{hook['post_class']}] Result errors: #{result.errors.full_messages}")
         render json: result.errors, status: :unprocessable_entity
       else
