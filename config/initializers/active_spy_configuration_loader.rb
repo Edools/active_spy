@@ -2,7 +2,7 @@ require 'hashie'
 
 yml_path = Rails.root.join('config', 'active_spy.yml')
 if File.exists?(yml_path)
-  all_settings = YAML.load_file(yml_path)
+  all_settings = YAML.load(ERB.new(File.read(yml_path)).result)
   env_settings = Hashie::Mash.new(all_settings[Rails.env])
 else
   # TODO: Add a warning here
