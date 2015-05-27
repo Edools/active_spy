@@ -3,7 +3,7 @@ source 'http://rubygems.org'
 # Example:
 #   gem "activesupport", ">= 2.3.5"
 gem 'activesupport', '>= 4.0.0'
-gem 'rest-client', '~> 1.6.7'
+gem 'rest-client', '>= 1.8.0'
 gem 'hashie'
 
 # Add dependencies to develop your gem here.
@@ -16,7 +16,7 @@ group :development do
   gem 'rspec', '~> 3.0.0'
   gem 'yard', '0.8.7.4'
   gem 'rdoc', '~> 4.1.1'
-  gem 'bundler', '~> 1.6.3'
+  gem 'bundler', '~> 1.9.7'
   gem 'jeweler', '~> 2.0.1'
   gem 'simplecov'
 end
