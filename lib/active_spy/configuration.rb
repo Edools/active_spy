@@ -43,6 +43,16 @@ module ActiveSpy
         @event_host
       end
 
+      # Set the default event-tunner verify_ssl mode
+      #
+      # @param [String] host to set
+      #
+      # @return [String] the host set
+      def event_verify_ssl(event_verify_ssl = nil)
+        @event_verify_ssl = event_verify_ssl unless event_verify_ssl.nil?
+        @event_verify_ssl
+      end
+
       # Set if the gem is in development mode or not.
       #
       # @param [Boolean] development moded state to set
@@ -89,7 +99,7 @@ module ActiveSpy
       #
       # @return [Hash] actual event settings
       def event_settings
-        { host: @event_host, port: @event_port }
+        { host: @event_host, port: @event_port, verify_ssl: @event_verify_ssl }
       end
     end
   end

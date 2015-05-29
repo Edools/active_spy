@@ -31,13 +31,18 @@ module ActiveSpy
     # Class method to register the service in an event-runner instance.
     #
     def self.register_service
-      host = ActiveSpy::Configuration.event_host
-      port = ActiveSpy::Configuration.event_port
-      @base_url = "#{host}:#{port}/services"
+      host        = ActiveSpy::Configuration.event_host
+      port        = ActiveSpy::Configuration.event_port
+      verify_ssl  = ActiveSpy::Configuration.event_verify_ssl
+      @base_url   = "#{host}:#{port}/services"
 
       return if self.service_registered?
       service = { service: ActiveSpy::Configuration.settings }.to_json
-      RestClient.post(@base_url, service, content_type: :json)
+
+      params = { content_type: :json }
+      params[:verify_ssl] = verify_ssl if verify_ssl
+
+      RestClient.post(@base_url, service, params)
     end
 
     # @!method self.service_registered?
@@ -45,9 +50,16 @@ module ActiveSpy
     # runner instance.
     #
     def self.service_registered?
-      name = ActiveSpy::Configuration.name
+      name        = ActiveSpy::Configuration.name
+      verify_ssl  = ActiveSpy::Configuration.event_verify_ssl
+      url         = "#{@base_url}/#{name.downcase.gsub(' ', '-').strip}"
+
       begin
-        RestClient.get "#{@base_url}/#{name.downcase.gsub(' ', '-').strip}"
+        if verify_ssl
+          RestClient.get url, verify_ssl: verify_ssl
+        else
+          RestClient.get url
+        end
       rescue RestClient::ResourceNotFound
         return false
       else

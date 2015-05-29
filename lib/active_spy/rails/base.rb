@@ -81,12 +81,15 @@ module ActiveSpy
       # Sends the event request to the configured event-runner instance.
       #
       def send_event_request
-        response = nil
-        host = ActiveSpy::Configuration.event_host
-        port = ActiveSpy::Configuration.event_port
+        response    = nil
+        host        = ActiveSpy::Configuration.event_host
+        port        = ActiveSpy::Configuration.event_port
+        verify_ssl  = ActiveSpy::Configuration.event_verify_ssl
+
+        params = { content_type: :json }
+        params[:verify_ssl] = verify_ssl if verify_ssl
         begin
-          response = RestClient.post "#{host}:#{port}/events", @event_json,
-            content_type: :json
+          response = RestClient.post "#{host}:#{port}/events", @event_json, params
         rescue => e
           ::Rails.logger.info(e.response)
         end

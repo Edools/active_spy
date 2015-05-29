@@ -16,8 +16,10 @@ module ActiveSpy
         host = ActiveSpy::Configuration.event_host
         port = ActiveSpy::Configuration.event_port
         name = ActiveSpy::Configuration.name.downcase.gsub(' ', '-').strip
+
+        @verify_ssl       = ActiveSpy::Configuration.event_verify_ssl
         @base_service_url = "#{host}:#{port}/services/#{name}"
-        @hooks = []
+        @hooks            = []
       end
 
       # Proxy all methods called in the {ActiveSpy::Hook} to
@@ -54,7 +56,13 @@ module ActiveSpy
       # Get the old hooks list for this service from the event-runner
       #
       def get_old_hooks
-        JSON.load(RestClient.get(@base_service_url))['hooks']
+        request = if @verify_ssl
+          RestClient.get(@base_service_url, verify_ssl: @verify_ssl)
+        else
+          RestClient.get(@base_service_url)
+        end
+
+        JSON.load(request)['hooks']
       end
 
       # Select from old hooks those that should be deleted from event runner.
@@ -98,13 +106,20 @@ module ActiveSpy
       #
       def delete_hooks(hooks_to_delete)
         hooks_to_delete.each do |hook|
-          RestClient.delete "#{@base_service_url}/hooks/#{hook['id']}"
+          if @verify_ssl
+            RestClient.delete "#{@base_service_url}/hooks/#{hook['id']}", verify_ssl: @verify_ssl
+          else
+            RestClient.delete "#{@base_service_url}/hooks/#{hook['id']}"
+          end
         end
       end
 
       # # Properly creates the +hooks_to_add+ in the event runner.
       #
       def add_hooks(hooks_to_add)
+        params = { content_type: :json }
+        params[:verify_ssl] = @verify_ssl if @verify_ssl
+
         hooks_to_add.each do |hook|
           hook = {
             'hook' => {
@@ -112,8 +127,7 @@ module ActiveSpy
               'post_path' => ActiveSpy::Engine.routes.url_helpers.notifications_path(hook['post_class'].downcase),
             }
           }
-          RestClient.post "#{@base_service_url}/hooks", hook.to_json,
-            content_type: :json
+          RestClient.post "#{@base_service_url}/hooks", hook.to_json, params
         end
       end
     end
