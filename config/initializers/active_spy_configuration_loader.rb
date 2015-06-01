@@ -16,4 +16,5 @@ ActiveSpy.configure do |config|
 
   config.event_host env_settings['event_host']
   config.event_port env_settings['event_port'].to_s
+  config.event_verify_ssl env_settings['event_verify_ssl']
 end

@@ -39,10 +39,10 @@ module ActiveSpy
       return if self.service_registered?
       service = { service: ActiveSpy::Configuration.settings }.to_json
 
-      params = { content_type: :json }
+      params = { content_type: :json, method: :post, url: @base_url, payload: service }
       params[:verify_ssl] = verify_ssl if verify_ssl
 
-      RestClient.post(@base_url, service, params)
+      RestClient::Request.execute(params)
     end
 
     # @!method self.service_registered?
@@ -56,7 +56,7 @@ module ActiveSpy
 
       begin
         if verify_ssl
-          RestClient.get url, verify_ssl: verify_ssl
+          RestClient::Request.execute(method: :get, url: url, verify_ssl: verify_ssl)
         else
           RestClient.get url
         end

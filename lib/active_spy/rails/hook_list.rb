@@ -57,7 +57,7 @@ module ActiveSpy
       #
       def get_old_hooks
         request = if @verify_ssl
-          RestClient.get(@base_service_url, verify_ssl: @verify_ssl)
+          RestClient::Request.execute(method: :get, url: @base_service_url, verify_ssl: @verify_ssl)
         else
           RestClient.get(@base_service_url)
         end
@@ -106,10 +106,11 @@ module ActiveSpy
       #
       def delete_hooks(hooks_to_delete)
         hooks_to_delete.each do |hook|
+          url = "#{@base_service_url}/hooks/#{hook['id']}"
           if @verify_ssl
-            RestClient.delete "#{@base_service_url}/hooks/#{hook['id']}", verify_ssl: @verify_ssl
+            RestClient::Request.execute(method: :delete, url: url, verify_ssl: @verify_ssl)
           else
-            RestClient.delete "#{@base_service_url}/hooks/#{hook['id']}"
+            RestClient.delete url
           end
         end
       end
@@ -117,8 +118,7 @@ module ActiveSpy
       # # Properly creates the +hooks_to_add+ in the event runner.
       #
       def add_hooks(hooks_to_add)
-        params = { content_type: :json }
-        params[:verify_ssl] = @verify_ssl if @verify_ssl
+        url = "#{@base_service_url}/hooks"
 
         hooks_to_add.each do |hook|
           hook = {
@@ -127,7 +127,13 @@ module ActiveSpy
               'post_path' => ActiveSpy::Engine.routes.url_helpers.notifications_path(hook['post_class'].downcase),
             }
           }
-          RestClient.post "#{@base_service_url}/hooks", hook.to_json, params
+
+          if @verify_ssl
+            RestClient::Request.execute(content_type: :json, method: :post,
+              url: url, payload: hook.to_json, verify_ssl: @verify_ssl)
+          else
+            RestClient.post url, hook.to_json, content_type: :json
+          end
         end
       end
     end

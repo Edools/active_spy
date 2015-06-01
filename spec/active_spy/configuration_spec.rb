@@ -14,6 +14,11 @@ describe ActiveSpy::Configuration do
     expect(Configuration.port).to eql('8888')
   end
 
+  it 'should be able to set and return verify_ssl' do
+    Configuration.event_verify_ssl 0
+    expect(Configuration.event_verify_ssl).to eql(0)
+  end
+
   context 'development mode' do
     it 'should be able to set via imperative method' do
       Configuration.development_mode!

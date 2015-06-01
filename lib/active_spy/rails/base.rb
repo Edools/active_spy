@@ -85,11 +85,13 @@ module ActiveSpy
         host        = ActiveSpy::Configuration.event_host
         port        = ActiveSpy::Configuration.event_port
         verify_ssl  = ActiveSpy::Configuration.event_verify_ssl
+        url         = "#{host}:#{port}/events"
 
-        params = { content_type: :json }
+        params = { content_type: :json, method: :post, url: url, payload: @event_json }
         params[:verify_ssl] = verify_ssl if verify_ssl
+
         begin
-          response = RestClient.post "#{host}:#{port}/events", @event_json, params
+          response = RestClient::Request.execute(params)
         rescue => e
           ::Rails.logger.info(e.response)
         end

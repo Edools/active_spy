@@ -12,9 +12,8 @@ describe Product do
     response = double('response')
     allow(response).to receive(:code) { 200 }
     allow(response).to receive(:body) { 'success' }
-
-    expect(RestClient).to receive(:post).with('http://event-runner.com:443/events',
-      {
+    expect(RestClient::Request).to receive(:execute).with(url: 'http://event-runner.com:443/events',
+      payload: {
         event: {
           type: 'Product',
           actor: 'my actor',
@@ -24,7 +23,9 @@ describe Product do
           },
           action: 'create',
         }
-      }.to_json, { content_type: :json }
+      }.to_json,
+      content_type: :json,
+      method: :post
     ).and_return(response)
 
     product.save
@@ -54,6 +55,7 @@ describe Product do
     allow(response).to receive(:body) { 'success' }
 
     allow(RestClient).to receive(:post).and_return(response)
+    allow(RestClient::Request).to receive(:execute).and_return(response)
 
     expect_any_instance_of(ActiveSpy::Rails::Validation::Event).
       to receive(:validate!)
@@ -84,15 +86,16 @@ describe Product do
       expect(RestClient).to receive(:get).
         with('http://event-runner.com:443/services/dummy').and_raise RestClient::ResourceNotFound
 
-      expect(RestClient).to receive(:post).with('http://event-runner.com:443/services',
-        {
+      expect(RestClient::Request).to receive(:execute).with(content_type: :json,
+        method: :post,
+        url: 'http://event-runner.com:443/services',
+        payload: {
           service: {
             name: 'dummy',
             hostname: 'http://dummy.com',
             port: '80'
           }
-        }.to_json,
-        content_type: :json
+        }.to_json
       )
 
       ActiveSpy.register_service

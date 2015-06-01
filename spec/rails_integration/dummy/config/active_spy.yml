@@ -4,6 +4,7 @@ test:
     port: 80
     event_host: http://event-runner.com
     event_port: 443
+    # event_verify_ssl: <%= OpenSSL::SSL::VERIFY_NONE %>
 
 development:
     name: dummy
