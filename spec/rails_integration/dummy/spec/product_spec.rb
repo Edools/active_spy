@@ -24,7 +24,7 @@ describe Product do
           action: 'create',
         }
       }.to_json,
-      content_type: :json,
+      headers: { content_type: :json },
       method: :post
     ).and_return(response)
 
@@ -86,8 +86,8 @@ describe Product do
       expect(RestClient).to receive(:get).
         with('http://event-runner.com:443/services/dummy').and_raise RestClient::ResourceNotFound
 
-      expect(RestClient::Request).to receive(:execute).with(content_type: :json,
-        method: :post,
+      expect(RestClient::Request).to receive(:execute).with(method: :post,
+        headers: { content_type: :json },
         url: 'http://event-runner.com:443/services',
         payload: {
           service: {

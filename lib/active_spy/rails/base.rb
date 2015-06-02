@@ -87,7 +87,7 @@ module ActiveSpy
         verify_ssl  = ActiveSpy::Configuration.event_verify_ssl
         url         = "#{host}:#{port}/events"
 
-        params = { content_type: :json, method: :post, url: url, payload: @event_json }
+        params = { headers: { content_type: :json }, method: :post, url: url, payload: @event_json }
         params[:verify_ssl] = verify_ssl if verify_ssl
 
         begin

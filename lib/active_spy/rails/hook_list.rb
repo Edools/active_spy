@@ -129,8 +129,8 @@ module ActiveSpy
           }
 
           if @verify_ssl
-            RestClient::Request.execute(content_type: :json, method: :post,
-              url: url, payload: hook.to_json, verify_ssl: @verify_ssl)
+            RestClient::Request.execute(method: :post, url: url, payload: hook.to_json,
+              headers: { content_type: :json }, verify_ssl: @verify_ssl)
           else
             RestClient.post url, hook.to_json, content_type: :json
           end
