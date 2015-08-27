@@ -38,11 +38,20 @@ Jeweler::Tasks.new do |gem|
 end
 Jeweler::RubygemsDotOrgTasks.new
 
-require 'rspec/core'
-require 'rspec/core/rake_task'
-RSpec::Core::RakeTask.new(:spec) do |spec|
-  spec.pattern = FileList['spec/active_spy/**/*_spec.rb']
+require 'rake/testtask'
+Rake::TestTask.new("test:regular") do |t|
+  t.libs = ["test"]
+  t.pattern = "test/*_test.rb"
+  t.ruby_opts = []
 end
+
+Rake::TestTask.new("test:generators") do |t|
+  t.libs = ["test"]
+  t.pattern = "test/generators/*_test.rb"
+  t.ruby_opts = []
+end
+
+task test: ['test:regular', 'test:generators']
 
 desc 'Code coverage detail'
 task :simplecov do
@@ -50,7 +59,7 @@ task :simplecov do
   Rake::Task['spec'].execute
 end
 
-task default: :spec
+task default: :test
 
 require 'yard'
 YARD::Rake::YardocTask.new
