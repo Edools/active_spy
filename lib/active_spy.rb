@@ -8,6 +8,7 @@ require 'active_spy/handler'
 module ActiveSpy
   DEFAULTS = {
     app_name: 'ActiveSpy',
+    app_env: 'development',
     fake_clients: false,
     aws: {}
   }

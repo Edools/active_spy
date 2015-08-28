@@ -61,5 +61,4 @@ end
 
 task default: :test
 
-require 'yard'
-YARD::Rake::YardocTask.new
+require 'bundler/gem_tasks'

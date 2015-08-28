@@ -38,7 +38,7 @@ module ActiveSpy
       private
 
       def sqs_queue_name
-        @sqs_queue_name ||= "#{app_name}-#{dasherized_name}-#{Rails.env}"
+        @sqs_queue_name ||= "#{app_name}-#{dasherized_name}-#{ActiveSpy.options[:app_env]}"
       end
 
       def sqs_queue
@@ -63,7 +63,7 @@ module ActiveSpy
 
       def sns_topic_name
         @sns_topic_name ||=
-          "edools-core-#{dasherized_name.gsub('-listener', '')}-#{Rails.env}"
+          "#{dasherized_name.gsub('-handler', '')}-#{ActiveSpy.options[:app_env]}"
       end
 
       def ensure_sqs_queue_subscription!

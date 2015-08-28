@@ -1,15 +1,11 @@
-require 'pry'
+require 'bundler/setup'
+Bundler.setup
 
+require 'pry-byebug'
 require 'minitest/autorun'
-require 'minitest/pride'
-
-require 'celluloid'
-require 'celluloid/test'
-require 'celluloid/autostart'
-
+# require 'minitest/pride'
 require 'active_record'
-require 'rails'
-
+# require 'rails'
 require 'dotenv'
 Dotenv.load
 
@@ -58,3 +54,5 @@ $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 $LOAD_PATH.unshift(File.dirname(__FILE__))
 
 require 'active_spy'
+
+ActiveSpy.options[:app_env] = 'test'

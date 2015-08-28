@@ -44,7 +44,7 @@ module ActiveSpy
       end
 
       def sns_topic_name
-        @sns_topic_name ||= "#{app_name}-#{dasherized_name}-#{Rails.env}"
+        @sns_topic_name ||= "#{app_name}-#{dasherized_name}-#{ActiveSpy.options[:app_env]}"
       end
 
       def dasherized_name

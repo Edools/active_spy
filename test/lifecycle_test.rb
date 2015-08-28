@@ -1,7 +1,5 @@
 require 'helper'
 require 'shoryuken'
-require 'shoryuken/manager'
-require 'shoryuken/launcher'
 
 config_file = File.join(File.expand_path('../', __FILE__), 'support', 'shoryuken.yml')
 Shoryuken::EnvironmentLoader.load(config_file: config_file)
@@ -10,10 +8,10 @@ class Post < ActiveRecord::Base
   include ActiveSpy::Agent
 end
 
-class PostHandler
+class ActiveSpyPostHandler
   include ActiveSpy::Handler
 
-  @@received_messages = []
+  @@received_messages = {}
 
   def self.received_messages
     @@received_messages
@@ -24,29 +22,29 @@ class PostHandler
   end
 
   def create(type, payload, actor)
-    @@received_messages << {
-      action:   'create',
-      type:     type,
-      payload:  payload,
-      actor:    actor
+    @@received_messages[:create] = {
+      'action'  =>   'create',
+      'type'    =>     type,
+      'payload' =>  payload,
+      'actor'   =>    actor
     }
   end
 
   def update(type, payload, actor)
-    @@received_messages << {
-      action:   'update',
-      type:     type,
-      payload:  payload,
-      actor:    actor
+    @@received_messages[:update] = {
+      'action'  =>   'update',
+      'type'    =>     type,
+      'payload' =>  payload,
+      'actor'   =>    actor
     }
   end
 
   def destroy(type, payload, actor)
-    @@received_messages << {
-      action:   'destroy',
-      type:     type,
-      payload:  payload,
-      actor:    actor
+    @@received_messages[:destroy] = {
+      'action'  =>   'destroy',
+      'type'    =>     type,
+      'payload' =>  payload,
+      'actor'   =>    actor
     }
   end
 end
@@ -55,20 +53,23 @@ class LifeCycleTest < ActiveSupport::TestCase
   fixtures :authors, :posts
 
   def setup
+    @sqs_client = PostHandler.send(:sqs_client)
+    @sqs_queue_name = PostHandler.send(:sqs_queue_name)
+
     Shoryuken.options[:aws][:receive_message] = { wait_time_seconds: 5 }
 
-    PostHandler.received_messages = []
+    PostHandler.received_messages = {}
 
-    Shoryuken.queues << PostHandler.send(:sqs_queue)
+    Shoryuken.queues << @sqs_queue_name
 
-    Shoryuken.register_worker PostHandler.send(:sqs_queue_name), PostHandler
+    Shoryuken.register_worker @sqs_queue_name, PostHandler
   end
 
   def teardown
     # PostHandler.delete_sqs_queue
   end
 
-  test "broadcast create, update and destroy events" do
+  test "broadcast create update and destroy events" do
     post_attrs = posts(:first).attributes
     post_attrs.delete('id')
 
@@ -77,38 +78,68 @@ class LifeCycleTest < ActiveSupport::TestCase
     post.destroy!
 
     poll_queues_until { PostHandler.received_messages.count == 3 }
+    create_message = PostHandler.received_messages[:create]
+    update_message = PostHandler.received_messages[:update]
+    destroy_message = PostHandler.received_messages[:destroy]
 
-    create_message = PostHandler.received_messages.shift
-    update_message = PostHandler.received_messages.shift
-    destroy_message = PostHandler.received_messages.shift
+    assert_equal('create', create_message['action'])
+    assert_equal('post', create_message['type'])
+    assert_equal({}, create_message['actor'])
+    assert_payload(post_attrs.merge({id: post.id}), create_message['payload'])
 
-    assert_equal('create', create_message[:actrion])
-    assert_equal('post', create_message[:type])
-    assert_equal({}, create_message[:payload])
-    assert_equal({}, create_message[:actor])
+    assert_equal('update', update_message['action'])
+    assert_equal('post', update_message['type'])
+    assert_equal({}, update_message['actor'])
+    assert_payload(post.attributes, update_message['payload'])
 
-    assert_equal('update', update_message[:actrion])
-    assert_equal('post', update_message[:type])
-    assert_equal({}, update_message[:payload])
-    assert_equal({}, update_message[:actor])
-
-    assert_equal('destroy', destroy_message[:actrion])
-    assert_equal('post', destroy_message[:type])
-    assert_equal({}, destroy_message[:payload])
-    assert_equal({}, destroy_message[:actor])
+    assert_equal('destroy', destroy_message['action'])
+    assert_equal('post', destroy_message['type'])
+    assert_equal({}, destroy_message['actor'])
+    assert_payload(post.attributes, destroy_message['payload'])
   end
 
   private
 
+  def assert_payload(expected, actual)
+    expected  = expected.as_json
+    actual    = actual.as_json
+
+    assert_equal expected.keys.count, actual.keys.count
+
+    expected.each do |key, value|
+      assert_equal value, actual[key]
+    end
+  end
+
   def poll_queues_until
-    Shoryuken::Launcher.run
+    queue = Shoryuken::Client.queues(@sqs_queue_name)
 
     Timeout::timeout(10) do
       begin
+        if (sqs_msgs = Array(receive_messages(queue))).any?
+          sqs_msgs.each { |sqs_msg| process(sqs_msg) }
+        end
         sleep 0.5
       end until yield
     end
-  ensure
-    Shoryuken::Launcher.stop
+  end
+
+  def receive_messages(queue)
+    options = (Shoryuken.options[:aws][:receive_message] || {}).dup
+    options[:max_number_of_messages] = 10
+    options[:message_attribute_names] = %w(All)
+    options[:attribute_names] = %w(All)
+
+    queue.receive_messages(options)
+  end
+
+  def process(sqs_msg)
+    worker = PostHandler.new
+
+    body = JSON.parse(sqs_msg.body)
+
+    worker.class.server_middleware.invoke(worker, @sqs_queue_name, sqs_msg, body) do
+      worker.perform(sqs_msg, body)
+    end
   end
 end
