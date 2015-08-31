@@ -60,7 +60,7 @@ class LifeCycleTest < ActiveSupport::TestCase
 
     ActiveSpyPostHandler.received_messages = {}
 
-    Shoryuken.queues << @sqs_queue_name
+    # Shoryuken.queues << @sqs_queue_name
 
     Shoryuken.register_worker @sqs_queue_name, ActiveSpyPostHandler
   end

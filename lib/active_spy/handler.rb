@@ -10,6 +10,8 @@ module ActiveSpy
 
       shoryuken_options queue: sqs_queue_name, auto_delete: true,
         body_parser: :json
+
+      load_shoryuken_queue!
     end
 
     def perform(sqs_message, body)
@@ -36,6 +38,10 @@ module ActiveSpy
 
     module ClassMethods
       private
+
+      def load_shoryuken_queue!
+        Shoryuken.queues << sqs_queue_name
+      end
 
       def sqs_queue_name
         @sqs_queue_name ||= "#{dasherized_name}-#{ActiveSpy.options[:app_env]}"
