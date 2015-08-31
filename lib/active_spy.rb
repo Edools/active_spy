@@ -1,5 +1,6 @@
 require 'shoryuken'
 require 'active_support'
+require 'request_store'
 
 require 'active_spy/station'
 require 'active_spy/agent'

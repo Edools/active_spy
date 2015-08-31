@@ -53,48 +53,56 @@ class LifeCycleTest < ActiveSupport::TestCase
   fixtures :authors, :posts
 
   def setup
-    @sqs_client = PostHandler.send(:sqs_client)
-    @sqs_queue_name = PostHandler.send(:sqs_queue_name)
+    @sqs_client = ActiveSpyPostHandler.send(:sqs_client)
+    @sqs_queue_name = ActiveSpyPostHandler.send(:sqs_queue_name)
 
     Shoryuken.options[:aws][:receive_message] = { wait_time_seconds: 5 }
 
-    PostHandler.received_messages = {}
+    ActiveSpyPostHandler.received_messages = {}
 
     Shoryuken.queues << @sqs_queue_name
 
-    Shoryuken.register_worker @sqs_queue_name, PostHandler
+    Shoryuken.register_worker @sqs_queue_name, ActiveSpyPostHandler
   end
 
   def teardown
-    # PostHandler.delete_sqs_queue
+    # ActiveSpyPostHandler.delete_sqs_queue
   end
 
   test "broadcast create update and destroy events" do
     post_attrs = posts(:first).attributes
     post_attrs.delete('id')
+    james = authors(:james)
+    bond = authors(:bond)
 
     post = Post.create!(post_attrs)
+
+    ActiveSpy::Agent.current_actor = james
+
     post.update!(title: 'My First Post v2')
+
+    ActiveSpy::Agent.current_actor = bond
+
     post.destroy!
 
-    poll_queues_until { PostHandler.received_messages.count == 3 }
-    create_message = PostHandler.received_messages[:create]
-    update_message = PostHandler.received_messages[:update]
-    destroy_message = PostHandler.received_messages[:destroy]
+    poll_queues_until { ActiveSpyPostHandler.received_messages.count == 3 }
+    create_message = ActiveSpyPostHandler.received_messages[:create]
+    update_message = ActiveSpyPostHandler.received_messages[:update]
+    destroy_message = ActiveSpyPostHandler.received_messages[:destroy]
 
     assert_equal('create', create_message['action'])
     assert_equal('post', create_message['type'])
-    assert_equal({}, create_message['actor'])
+    assert_equal(nil, create_message['actor'])
     assert_payload(post_attrs.merge({id: post.id}), create_message['payload'])
 
     assert_equal('update', update_message['action'])
     assert_equal('post', update_message['type'])
-    assert_equal({}, update_message['actor'])
+    assert_equal(james.attributes, update_message['actor'])
     assert_payload(post.attributes, update_message['payload'])
 
     assert_equal('destroy', destroy_message['action'])
     assert_equal('post', destroy_message['type'])
-    assert_equal({}, destroy_message['actor'])
+    assert_equal(bond.attributes, destroy_message['actor'])
     assert_payload(post.attributes, destroy_message['payload'])
   end
 
@@ -134,7 +142,7 @@ class LifeCycleTest < ActiveSupport::TestCase
   end
 
   def process(sqs_msg)
-    worker = PostHandler.new
+    worker = ActiveSpyPostHandler.new
 
     body = JSON.parse(sqs_msg.body)
 

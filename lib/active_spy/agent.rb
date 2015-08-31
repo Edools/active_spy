@@ -43,7 +43,19 @@ module ActiveSpy
     end
 
     def payload_for_actor
-      {}
+      actor = ActiveSpy::Agent.current_actor
+
+      if actor
+        actor.respond_to?(:to_actor) ? actor.to_actor : actor.attributes
+      end
+    end
+
+    def self.current_actor
+      RequestStore.store[:current_actor]
+    end
+
+    def self.current_actor=(actor)
+      RequestStore.store[:current_actor] = actor
     end
 
     module ClassMethods

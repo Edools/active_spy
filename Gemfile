@@ -4,6 +4,7 @@ source 'http://rubygems.org'
 gem 'activesupport', '>= 4.0.0'
 gem 'shoryuken', '>= 1.0.0'
 gem 'nullobject', '>= 0.0.5'
+gem 'request_store', '>= 1.2.0'
 
 # Add dependencies to develop your gem here.
 # Include everything needed to run rake, tests, features, etc.

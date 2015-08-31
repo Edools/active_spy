@@ -38,7 +38,7 @@ module ActiveSpy
       private
 
       def sqs_queue_name
-        @sqs_queue_name ||= "#{app_name}-#{dasherized_name}-#{ActiveSpy.options[:app_env]}"
+        @sqs_queue_name ||= "#{dasherized_name}-#{ActiveSpy.options[:app_env]}"
       end
 
       def sqs_queue

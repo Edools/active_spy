@@ -93,6 +93,7 @@ GEM
     rake (10.4.2)
     rdoc (4.1.1)
       json (~> 1.4)
+    request_store (1.2.0)
     rubocop (0.24.1)
       json (>= 1.7.7, < 2)
       parser (>= 2.2.0.pre.3, < 3.0)
@@ -128,6 +129,7 @@ DEPENDENCIES
   nullobject (>= 0.0.5)
   pry-byebug
   rake
+  request_store (>= 1.2.0)
   rubocop (~> 0.24.0)
   shoryuken (>= 1.0.0)
   simplecov
