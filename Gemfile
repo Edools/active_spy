@@ -8,7 +8,7 @@ gem 'request_store', '>= 1.2.0'
 
 # Add dependencies to develop your gem here.
 # Include everything needed to run rake, tests, features, etc.
-group :development, :test do
+group :development do
   gem 'activerecord', '>= 4.0.0'
   gem 'rubocop', '~> 0.24.0'
   gem 'bundler', '~> 1.9.7'

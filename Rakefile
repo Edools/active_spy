@@ -31,8 +31,8 @@ Jeweler::Tasks.new do |gem|
   DESC
   gem.email = 'd.camata@gmail.com'
   gem.authors = ['Douglas Camata']
-  gem.files = Dir['lib/**/*'] + Dir['app/**/*.rb'] + Dir['config/**/*.rb'] +
-    Dir['.document'] + Dir['README.md'] + Dir['LICENSE.txt'] + Dir['VERSION'] +
+  gem.files = Dir['lib/**/*'] + Dir['config/**/*.rb'] + Dir['.document'] +
+    Dir['README.md'] + Dir['LICENSE.txt'] + Dir['VERSION'] +
     Dir['Rakefile'] + Dir['active_spy.gemspec'] + Dir['Gemfile*']
   # dependencies defined in Gemfile
 end
