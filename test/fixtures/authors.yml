@@ -1,0 +1,9 @@
+james:
+  id: 1
+  name: James
+  email: james@bond.com
+
+bond:
+  id: 2
+  name: Bond
+  email: bond@james_bond.com

@@ -29,6 +29,10 @@ Gem::Specification.new do |s|
     "config/initializers/active_spy_configuration_loader.rb",
     "config/routes.rb",
     "lib/active_spy.rb",
+    "lib/active_spy/agent.rb",
+    "lib/active_spy/handler.rb",
+    "lib/active_spy/station.rb",
+    "lib/active_spy/version.rb",
     "lib/rails/generators/active_spy/install/install_generator.rb",
     "lib/rails/generators/active_spy/install/templates/active_spy.yml",
     "lib/rails/generators/active_spy/install/templates/initializer.rb"

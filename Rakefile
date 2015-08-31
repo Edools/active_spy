@@ -12,9 +12,11 @@ end
 require 'rake'
 
 require 'jeweler'
+require './lib/active_spy/version.rb'
 Jeweler::Tasks.new do |gem|
   # gem is a Gem::Specification... see
   # http://guides.rubygems.org/specification-reference/ for more options
+  gem.version = ActiveSpy::Version::STRING
   gem.name = 'active_spy'
   gem.homepage = 'http://github.com/edools/active_spy'
   gem.license = 'MIT'
@@ -31,18 +33,27 @@ Jeweler::Tasks.new do |gem|
   DESC
   gem.email = 'd.camata@gmail.com'
   gem.authors = ['Douglas Camata']
-  gem.files = Dir['lib/**/*'] + Dir['app/**/*.rb'] + Dir['config/**/*.rb'] +
-    Dir['.document'] + Dir['README.md'] + Dir['LICENSE.txt'] + Dir['VERSION'] +
+  gem.files = Dir['lib/**/*'] + Dir['config/**/*.rb'] + Dir['.document'] +
+    Dir['README.md'] + Dir['LICENSE.txt'] + Dir['VERSION'] +
     Dir['Rakefile'] + Dir['active_spy.gemspec'] + Dir['Gemfile*']
   # dependencies defined in Gemfile
 end
 Jeweler::RubygemsDotOrgTasks.new
 
-require 'rspec/core'
-require 'rspec/core/rake_task'
-RSpec::Core::RakeTask.new(:spec) do |spec|
-  spec.pattern = FileList['spec/active_spy/**/*_spec.rb']
+require 'rake/testtask'
+Rake::TestTask.new("test:regular") do |t|
+  t.libs = ["test"]
+  t.pattern = "test/*_test.rb"
+  t.ruby_opts = []
 end
+
+Rake::TestTask.new("test:generators") do |t|
+  t.libs = ["test"]
+  t.pattern = "test/generators/*_test.rb"
+  t.ruby_opts = []
+end
+
+task test: ['test:regular', 'test:generators']
 
 desc 'Code coverage detail'
 task :simplecov do
@@ -50,7 +61,6 @@ task :simplecov do
   Rake::Task['spec'].execute
 end
 
-task default: :spec
+task default: :test
 
-require 'yard'
-YARD::Rake::YardocTask.new
+require 'bundler/gem_tasks'
