@@ -66,6 +66,12 @@ module ActiveSpy
           message: event.to_json
         })
       end
+
+      private
+
+      def delete_sns_topic
+        sns_client.delete_topic(topic_arn: sns_topic.topic_arn)
+      end
     end
   end
 end

@@ -115,6 +115,10 @@ module ActiveSpy
         }
         ).gsub("\n", '').gsub(/ +/, '')
       end
+
+      def delete_sqs_queue
+        sqs_client.delete_queue(queue_url: sqs_queue.queue_url)
+      end
     end
   end
 end

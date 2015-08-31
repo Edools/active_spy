@@ -66,7 +66,8 @@ class LifeCycleTest < ActiveSupport::TestCase
   end
 
   def teardown
-    # ActiveSpyPostHandler.delete_sqs_queue
+    ActiveSpyPostHandler.send(:delete_sqs_queue)
+    Post.send(:delete_sns_topic)
   end
 
   test "broadcast create update and destroy events" do
