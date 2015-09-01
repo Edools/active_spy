@@ -39,7 +39,7 @@ module ActiveSpy
     end
 
     def payload_for(action)
-      { self.class.name.underscore => attributes }
+      attributes
     end
 
     def payload_for_actor

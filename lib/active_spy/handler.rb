@@ -17,7 +17,7 @@ module ActiveSpy
     def perform(sqs_message, body)
       type    = body.delete('type')
       action  = body.delete('action')
-      payload = body.delete('payload')[type]
+      payload = body.delete('payload')
       actor   = body.delete('actor')
 
       class_name = self.class.name
