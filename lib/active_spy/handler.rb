@@ -20,14 +20,7 @@ module ActiveSpy
       payload = body.delete('payload')
       actor   = body.delete('actor')
 
-      class_name = self.class.name
-      # Rails.logger.debug("[Interceptor][#{class_name}] - Receiving Message##{sqs_message.message_id}")
-      # Rails.logger.debug("[Interceptor][#{class_name}] - Message##{sqs_message.message_id} type: #{type}")
-      # Rails.logger.debug("[Interceptor][#{class_name}] - Message##{sqs_message.message_id} action: #{action}")
-      # Rails.logger.debug("[Interceptor][#{class_name}] - Message##{sqs_message.message_id} actor: #{actor.inspect}")
-      # Rails.logger.debug("[Interceptor][#{class_name}] - Message##{sqs_message.message_id} payload: #{payload.inspect}")
       send(action, type, payload, actor)
-      # Rails.logger.debug("[Interceptor][#{class_name}] - Message##{sqs_message.message_id} Received!")
     end
 
     def create(type, payload, actor); end
@@ -44,7 +37,7 @@ module ActiveSpy
       end
 
       def sqs_queue_name
-        @sqs_queue_name ||= "#{dasherized_name}-#{ActiveSpy.options[:app_env]}"
+        @sqs_queue_name ||= "#{app_name}-#{dasherized_name}-#{ActiveSpy.options[:app_env]}"
       end
 
       def sqs_queue
